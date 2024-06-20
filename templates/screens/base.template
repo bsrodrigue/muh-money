@@ -1,0 +1,12 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../types";
+import { ExpandingView } from "../../components"
+
+type ${ScreenName}ScreenProps = NativeStackScreenProps<RootStackParamList, '${ScreenNamePrefix}'>;
+
+export default function ${ScreenName}Screen({ navigation, route }: ${ScreenName}ScreenProps) {
+    return (
+        <ExpandingView>
+        </ExpandingView>
+    )
+}
