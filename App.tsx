@@ -28,8 +28,8 @@ export default function App() {
   return (
     <PaperProvider>
       <ThemeProvider theme={lightTheme}>
+        <StatusBar hidden translucent />
         <SafeAreaView style={{ flex: 1, backgroundColor: "transparent" }}>
-          <StatusBar backgroundColor="transparent" />
           <SessionProvider initialSession={session}>
             <RootStackNavigator skipOnboarding={false} />
           </SessionProvider>

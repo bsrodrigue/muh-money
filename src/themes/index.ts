@@ -8,6 +8,8 @@ const commonColors = {
   yellow: "#FFF455",
   error: "#FF204E",
   greyOutline: "#D9D9D9",
+  grey0: "F5F4F4",
+  greyBackground: "#363636",
 }
 
 export const lightTheme = createTheme({
@@ -16,4 +18,12 @@ export const lightTheme = createTheme({
     ...commonColors,
     background: "black"
   },
+
+  components: {
+    Text: (props, theme) => ({
+      style: {
+        fontFamily: "regular"
+      }
+    })
+  }
 });

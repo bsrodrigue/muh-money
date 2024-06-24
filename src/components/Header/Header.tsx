@@ -1,6 +1,6 @@
-import { Icon, Image } from "@rneui/themed";
-import { TouchableOpacity, View } from "react-native";
-import { pmubLogo } from "../../assets";
+import { Icon, useTheme } from "@rneui/themed";
+import { TouchableOpacity, View, Text } from "react-native";
+import { Avatar } from "@rneui/base";
 
 type HeaderProps = {
   searchMode?: boolean;
@@ -13,22 +13,33 @@ type HeaderProps = {
 };
 
 export default function Header({ onPressLogout }: HeaderProps) {
+  const { theme: { colors: { primary, greyBackground, black, white } } } = useTheme();
   const logoSize = 50;
 
   return (
-    <View style={{ backgroundColor: "white", alignItems: "center", flexDirection: "row", justifyContent: "center", paddingHorizontal: 15 }}>
-      <View style={{ flexGrow: 1 }}>
-        <Image source={pmubLogo} resizeMode="contain" style={{
-          height: logoSize,
-          width: logoSize,
-        }} />
+    <View style={{ backgroundColor: black, alignItems: "center", flexDirection: "row", justifyContent: "center", padding: 15 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", flexGrow: 1 }}>
+        <Avatar
+          size={logoSize}
+          containerStyle={{
+            backgroundColor: primary,
+            marginRight: 10
+          }}
+          rounded
+        />
+        <View >
+          <Text style={{ color: white, fontSize: 12, opacity: 0.5 }}  >Welcome back</Text>
+          <Text style={{ color: white, fontSize: 25, fontWeight: "bold" }}>Rachid BADINI</Text>
+        </View>
       </View>
       <TouchableOpacity
         onPress={() => {
           onPressLogout?.();
         }}
         style={{ flexGrow: 1, alignItems: "flex-end" }}>
-        <Icon type="ionicon" name="exit" />
+        <View style={{ padding: 7, backgroundColor: greyBackground, borderRadius: 50, aspectRatio: 1 }}>
+          <Icon color={white} type="font-awesome" name="cog" />
+        </View>
       </TouchableOpacity>
     </View>
 

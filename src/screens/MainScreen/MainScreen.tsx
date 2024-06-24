@@ -14,10 +14,10 @@ interface TabIconProps {
 }
 
 function TabIcon({ icon, focused }: TabIconProps) {
-  const { theme: { colors: { yellow } } } = useTheme();
+  const { theme: { colors: { black, greyOutline } } } = useTheme();
 
   return (
-    <Icon color={focused ? yellow : "white"} name={icon} type="font-awesome-5" />
+    <Icon color={focused ? black : greyOutline} name={icon} type="font-awesome-5" />
   );
 }
 
@@ -39,27 +39,27 @@ export default function MainScreen({ navigation }: MainScreenProps) {
   return (
     <View style={styles.container}>
       <LogoutDialog isVisible={logoutDialogIsvisible} onDismissDialog={() => setLogoutDialogIsVisible(false)} />
-      <Tab.Navigator screenOptions={{
-        tabBarStyle: {
-          paddingVertical: 10,
-          height: 60,
-          backgroundColor: black
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontFamily: "Quicksand-600",
-          marginBottom: 5,
-          color: "white"
-        },
-        tabBarActiveTintColor: primary,
-        header: () => (
-          <Header onPressLogout={() => setLogoutDialogIsVisible(true)} />
-        )
-      }}>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            paddingVertical: 10,
+            height: 60,
+            borderTopWidth: 0
+          },
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontFamily: "600",
+            marginBottom: 5,
+            color: black
+          },
+          header: () => (
+            <Header onPressLogout={() => setLogoutDialogIsVisible(true)} />
+          )
+        }}>
         <Tab.Screen
           options={{
             headerShown: true,
-            tabBarLabel: "Accueil",
+            tabBarLabel: "Home",
             tabBarIcon: ({ focused }) => <TabIcon icon="home" focused={focused} />,
           }}
           name="Home"
