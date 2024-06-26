@@ -1,4 +1,6 @@
 //TODO: Create an asset exporter (converts assets/ folder into exported object)
-export const assets = {
+import defaultAvatar from "./images/avatar/default_avatar.jpg";
 
+export const assets = {
+  defaultAvatar,
 };

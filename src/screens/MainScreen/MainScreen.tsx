@@ -34,7 +34,7 @@ const Tab = createBottomTabNavigator();
 
 export default function MainScreen({ navigation }: MainScreenProps) {
   const [logoutDialogIsvisible, setLogoutDialogIsVisible] = useState(false);
-  const { theme: { colors: { primary, secondary, black } } } = useTheme();
+  const { theme: { colors: { black, white } } } = useTheme();
 
   return (
     <View style={styles.container}>
@@ -44,13 +44,14 @@ export default function MainScreen({ navigation }: MainScreenProps) {
           tabBarStyle: {
             paddingVertical: 10,
             height: 60,
-            borderTopWidth: 0
+            borderTopWidth: 0,
+            shadowColor: white
           },
           tabBarLabelStyle: {
             fontSize: 12,
-            fontFamily: "600",
+            fontFamily: "font-600",
             marginBottom: 5,
-            color: black
+            color: black,
           },
           header: () => (
             <Header onPressLogout={() => setLogoutDialogIsVisible(true)} />

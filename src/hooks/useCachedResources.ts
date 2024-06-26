@@ -13,11 +13,11 @@ export default function useCachedResources() {
   const { getData } = useAsyncStorage();
 
   const quicksandFontConfig = {
-    "regular": require("../assets/fonts/Quicksand-Regular.ttf"),
-    "300": require("../assets/fonts/Quicksand-Light.ttf"),
-    "500": require("../assets/fonts/Quicksand-Medium.ttf"),
-    "600": require("../assets/fonts/Quicksand-SemiBold.ttf"),
-    "700": require("../assets/fonts/Quicksand-Bold.ttf"),
+    "font-regular": require("../assets/fonts/Quicksand-Regular.ttf"),
+    "font-300": require("../assets/fonts/Quicksand-Light.ttf"),
+    "font-500": require("../assets/fonts/Quicksand-Medium.ttf"),
+    "font-600": require("../assets/fonts/Quicksand-SemiBold.ttf"),
+    "font-700": require("../assets/fonts/Quicksand-Bold.ttf"),
   };
 
   useEffect(() => {

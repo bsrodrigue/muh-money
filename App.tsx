@@ -8,8 +8,6 @@ import RootStackNavigator from "./src/navigator";
 import { SessionProvider } from "./src/providers";
 import { lightTheme } from "./src/themes";
 import { Image } from "@rneui/base";
-import { pmubLogo } from "./src/assets";
-import { PaperProvider } from "react-native-paper";
 
 if (typeof atob === 'undefined') {
   global.atob = decode;
@@ -22,20 +20,18 @@ export default function App() {
     return <Image style={{
       resizeMode: "contain",
       width: 150,
-    }} source={pmubLogo} />
+    }} />
   }
 
   return (
-    <PaperProvider>
-      <ThemeProvider theme={lightTheme}>
-        <StatusBar hidden translucent />
-        <SafeAreaView style={{ flex: 1, backgroundColor: "transparent" }}>
-          <SessionProvider initialSession={session}>
-            <RootStackNavigator skipOnboarding={false} />
-          </SessionProvider>
-          <Toast />
-        </SafeAreaView>
-      </ThemeProvider>
-    </PaperProvider>
+    <ThemeProvider theme={lightTheme}>
+      <StatusBar hidden translucent />
+      <SafeAreaView style={{ flex: 1, backgroundColor: "transparent" }}>
+        <SessionProvider initialSession={session}>
+          <RootStackNavigator />
+        </SessionProvider>
+        <Toast />
+      </SafeAreaView>
+    </ThemeProvider>
   );
 }

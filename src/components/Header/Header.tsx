@@ -1,6 +1,7 @@
 import { Icon, useTheme } from "@rneui/themed";
 import { TouchableOpacity, View, Text } from "react-native";
 import { Avatar } from "@rneui/base";
+import { assets } from "../../assets";
 
 type HeaderProps = {
   searchMode?: boolean;
@@ -13,7 +14,7 @@ type HeaderProps = {
 };
 
 export default function Header({ onPressLogout }: HeaderProps) {
-  const { theme: { colors: { primary, greyBackground, black, white } } } = useTheme();
+  const { theme: { colors: { primary, grey1, black, white } } } = useTheme();
   const logoSize = 50;
 
   return (
@@ -37,7 +38,7 @@ export default function Header({ onPressLogout }: HeaderProps) {
           onPressLogout?.();
         }}
         style={{ flexGrow: 1, alignItems: "flex-end" }}>
-        <View style={{ padding: 7, backgroundColor: greyBackground, borderRadius: 50, aspectRatio: 1 }}>
+        <View style={{ padding: 7, backgroundColor: grey1, borderRadius: 50, aspectRatio: 1 }}>
           <Icon color={white} type="font-awesome" name="cog" />
         </View>
       </TouchableOpacity>
