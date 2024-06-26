@@ -4,12 +4,12 @@ import { useTheme } from "@rneui/themed";
 type ButtonProps = BaseButtonProps;
 
 export default function Button({ titleStyle, ...rest }: ButtonProps) {
-  const { theme: { colors: { blue } } } = useTheme();
+  const { theme: { colors: { primary } } } = useTheme();
 
   return (
     <BaseButton
-      titleStyle={[{ fontFamily: "Quicksand-700", fontSize: 16 }, titleStyle]}
-      color={rest.color || blue}
+      titleStyle={[{ fontFamily: "font-700", fontSize: 16 }, titleStyle]}
+      color={rest.color || primary}
       size="md"
       radius={5}
       disabled={rest.loading || rest.disabled} {...rest} />
