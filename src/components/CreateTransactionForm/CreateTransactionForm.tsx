@@ -1,6 +1,6 @@
 import { useTheme } from '@rneui/themed';
 import { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native';
 import Animated, { useSharedValue } from 'react-native-reanimated';
 import { ExpandingView } from '../ExpandingView';
 import { Row } from '../Row';
@@ -9,6 +9,8 @@ import { FilterBadge } from '../FilterBadge';
 import { TextInput } from '../Input';
 import { Icon } from '@rneui/base';
 import { Button } from '../Button';
+import { TransactionType } from '../../types/models';
+import { transactionTypeColors } from '../../config';
 
 const categories = [
   "Electricity",
@@ -26,29 +28,20 @@ const transactionTypes = [
   "Transfer"
 ];
 
-export type TransactionType = "Expense" | "Income" | "Transfer";
-
 interface CreateTransactionFormProps {
   type: TransactionType;
   onPressType?: (type: TransactionType) => void;
 }
 
 export default function CreateTransactionForm({ type = "Expense", onPressType }: CreateTransactionFormProps) {
-  const { theme: { colors: { error, primary, warning, success } } } = useTheme();
+  const { theme: { colors: { primary } } } = useTheme();
   const [optionsEnabled, setOptionsEnabled] = useState(false);
 
-  const transactionTypeColors = {
-    "Expense": error,
-    "Income": success,
-    "Transfer": warning
-  }
-
   return (
-
     <ExpandingView style={{ paddingHorizontal: 10 }}>
       <Row style={{ justifyContent: "space-between", alignItems: "center" }}>
         <Text style={{ fontWeight: "bold", fontSize: 18 }}>Create Transaction</Text>
-        <ToggleButton isActiveByDefault={false} onChange={(active) => setOptionsEnabled(active)} />
+        <ToggleButton onChange={(active) => setOptionsEnabled(active)} />
       </Row>
 
       <Row style={{ gap: 5, marginVertical: 10 }}>

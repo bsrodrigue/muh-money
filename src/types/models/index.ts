@@ -7,6 +7,16 @@ export interface ID {
   id: number;
 };
 
+export type TransactionType = "Expense" | "Income" | "Transfer";
+
+export interface Transaction {
+  id?: number;
+  title: string;
+  category?: string;
+  type: TransactionType;
+  amount: number;
+}
+
 export interface ResultPagination {
   page: number;
   pageSize: number;

@@ -46,7 +46,7 @@ const TextInput = forwardRef(({ onChange, wrapperStyle, label, inputStyle, error
         inputStyle={
           [
             {
-              fontSize: 16,
+              fontSize: 14,
               fontFamily: "font-600",
               height: 30
             },

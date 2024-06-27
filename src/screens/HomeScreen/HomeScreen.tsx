@@ -1,11 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
 import React, { useState } from "react";
-import { CardBottomSheet, CreateTransactionForm, ExpandingView, FilterBadge, Row, TotalBalanceCard, TransactionHistoryItem } from "../../components";
-import { View, Text, FlatList } from "react-native";
+import { CardBottomSheet, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, TotalBalanceCard, TransactionHistoryItem } from "../../components";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { useTheme } from "@rneui/themed";
 import { FAB } from "@rneui/base";
-import { TransactionType } from "../../components/CreateTransactionForm/CreateTransactionForm";
+import { TransactionType } from "../../types/models";
+import { transactions } from "../../mock";
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -20,7 +21,8 @@ const timeFilters = [
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   const { theme: { colors: { white, black, primary } } } = useTheme();
   const [transactionType, setTransactionType] = useState<TransactionType>("Expense");
-  const [formIsVisible, setFormIsVisible] = useState(false);
+  const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState(null);
 
   return (
     <ExpandingView style={{ backgroundColor: white }}>
@@ -67,18 +69,26 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
               gap: 5,
               paddingVertical: 10
             }}
-            keyExtractor={(item) => item.toString()}
-            data={[1, 2, 3, 4, 5]}
-            renderItem={(info) => (
-              <TransactionHistoryItem />
+            keyExtractor={(item) => item.title.toString()}
+            data={transactions}
+            renderItem={(transaction) => (
+              <TouchableOpacity onLongPress={() => setEditingTransaction(transaction.item)}>
+                <TransactionHistoryItem{...transaction.item} />
+              </TouchableOpacity>
             )} />
         </View>
       </View>
-      <FAB onPress={() => setFormIsVisible(true)} title="Create Transaction" size="small" color={primary} placement="right" titleStyle={{ fontSize: 12 }} />
-      <CardBottomSheet isVisible={formIsVisible} onBackdropPress={() => setFormIsVisible(false)}>
+      <FAB onPress={() => setCreateFormIsVisible(true)} title="Create Transaction" size="small" color={primary} placement="right" titleStyle={{ fontSize: 12 }} />
+
+      <CardBottomSheet isVisible={createFormIsVisible} onBackdropPress={() => setCreateFormIsVisible(false)}>
         <CreateTransactionForm type={transactionType} onPressType={(type) => setTransactionType(type)} />
       </CardBottomSheet>
+
+      <CardBottomSheet isVisible={Boolean(editingTransaction)} onBackdropPress={() => setEditingTransaction(null)}>
+        <EditTransactionForm transaction={editingTransaction} />
+      </CardBottomSheet>
+
     </ExpandingView>
-  )
+  );
 }
 

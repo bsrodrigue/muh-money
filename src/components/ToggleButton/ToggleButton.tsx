@@ -1,15 +1,14 @@
 import { useTheme } from "@rneui/themed";
-import Animated, { interpolate, interpolateColor, runOnJS, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, { interpolate, interpolateColor, runOnJS, runOnUI, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { Text, TouchableOpacity } from 'react-native'
 
 interface ToggleButtonProps {
-  isActiveByDefault: boolean;
-  onChange: (active: boolean) => void;
+  onChange?: (active: boolean) => void;
 }
 
-export default function ToggleButton({ isActiveByDefault, onChange }: ToggleButtonProps) {
+export default function ToggleButton({ onChange }: ToggleButtonProps) {
   const { theme: { colors: { primary, greyOutline, grey2, primaryLight } } } = useTheme();
-  const toggled = useSharedValue(isActiveByDefault ? 1 : 0);
+  const toggled = useSharedValue(0);
 
   const toggleButtonAnimatedContainerStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(
@@ -39,9 +38,14 @@ export default function ToggleButton({ isActiveByDefault, onChange }: ToggleButt
 
   return (
     <TouchableOpacity style={{ alignItems: "flex-end", gap: 3 }} onPress={() => {
-      toggled.value = withSpring((toggled.value === 1) ? 0 : 1, {}, () => {
-        runOnJS(onChange)(toggled.value === 1);
+      const isToggled = toggled.value === 1;
+      toggled.value = withSpring(toggled.value === 1 ? 0 : 1, {}, () => {
+        //Takes too much time to trigger
       });
+
+      runOnUI(() => {
+        runOnJS(onChange)(!isToggled);
+      })();
     }}>
       <Text style={{ opacity: 0.5, fontWeight: "bold", fontSize: 10 }}>Advanced options</Text>
       <Animated.View

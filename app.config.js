@@ -1,6 +1,6 @@
 module.exports = {
   "expo": {
-    "name": "muh-money",
+    "name": "muh_money",
     "description": "My money is infinite",
     "githubUrl": "https://github.com/bsrodrigue/pmub-rn",
     "version": "1.0.0",
@@ -25,15 +25,15 @@ module.exports = {
         "foregroundImage": "./src/assets/icons/android/res/mipmap-xxxhdpi/ic_launcher.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "bf.bsrodrigue.pmub"
+      "package": "bf.bsrodrigue.muh_money"
     },
     "extra": {
       "eas": {
-        "projectId": "2a95f01d-48ff-457c-a8b5-06cc62cbee7a"
+        "projectId": "9b29a936-2e5e-4ea1-a6a3-09ad57d6494a"
       },
       "API_URL": process.env['EXPO_PUBLIC_API_URL'],
     },
     "owner": "bsrodrigue",
-    "slug": "pmub"
+    "slug": "muh_money"
   }
 };
