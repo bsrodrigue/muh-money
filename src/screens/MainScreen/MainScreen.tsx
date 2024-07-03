@@ -7,6 +7,7 @@ import { Header, LogoutDialog } from "../../components";
 import { RootStackParamList } from "../../types";
 import { HomeScreen } from "../HomeScreen";
 import { ViewAccountScreen } from "../ViewAccountScreen";
+import { AccountsScreen } from "../AccountsScreen";
 
 interface TabIconProps {
   icon: string;
@@ -67,7 +68,14 @@ export default function MainScreen({ navigation }: MainScreenProps) {
           component={HomeScreen} />
         <Tab.Screen
           options={{
-            tabBarLabel: "Mon Profil",
+            tabBarLabel: "Accounts",
+            tabBarIcon: ({ focused }) => <TabIcon icon="wallet" focused={focused} />,
+          }}
+          name="Accounts"
+          component={AccountsScreen} />
+        <Tab.Screen
+          options={{
+            tabBarLabel: "Profile",
             tabBarIcon: ({ focused }) => <TabIcon icon="user" focused={focused} />,
           }}
           name="Profile"
