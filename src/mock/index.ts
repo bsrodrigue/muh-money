@@ -1,4 +1,22 @@
-import { Transaction } from "../types/models";
+import { Budget, Transaction } from "../types/models";
+
+export const budgets: Budget[] = [
+  {
+    title: "Daily Food",
+    type: "Basic",
+    balance: 175_000,
+  },
+  {
+    title: "Electricity Bills",
+    type: "Household",
+    balance: 20_000,
+  },
+  {
+    title: "FromSoftware future DLC releases",
+    type: "Important",
+    balance: 50_000,
+  },
+];
 
 export const transactions: Transaction[] = [
   {

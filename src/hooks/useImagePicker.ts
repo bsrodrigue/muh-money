@@ -11,10 +11,7 @@ export default function useImagePicker() {
   }
 
   const pickImage = async (aspect: [number, number] = [1, 1]) => {
-    if (!status.granted) {
-      const granted = await handlePermission();
-      if (!granted) return;
-    }
+    if (!status.granted && ! await handlePermission()) return;
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -23,10 +20,8 @@ export default function useImagePicker() {
       quality: 0.5,
     })
 
-    if (!result.canceled) {
+    if (!result.canceled)
       setImgUri(result.assets[0].uri);
-
-    }
   }
 
   return { imgUri, pickImage };

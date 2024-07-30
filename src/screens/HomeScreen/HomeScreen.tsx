@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
 import React, { useState } from "react";
 import { CardBottomSheet, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, ScreenDivider, TotalBalanceCard, TransactionHistoryItem } from "../../components";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import { useTheme } from "@rneui/themed";
 import { FAB } from "@rneui/base";
 import { TransactionType } from "../../types/models";
@@ -20,6 +20,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   const { theme: { colors: { white, black, primary } } } = useTheme();
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
+  const { height } = Dimensions.get("window");
 
   return (
     <ExpandingView style={{ backgroundColor: white }}>
@@ -53,7 +54,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
           <Text style={{ marginBottom: 10, fontSize: 12 }}>{`June 10th - June 17th`}</Text>
           <FlatList
             style={{
-              height: 200,
+              height: (height * 0.35),
             }}
             contentContainerStyle={{
               gap: 5,
@@ -68,6 +69,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             )} />
         </View>
       </View>
+
       <FAB onPress={() => setCreateFormIsVisible(true)} title="Create Transaction" size="small" color={primary} placement="right" titleStyle={{ fontSize: 12 }} />
 
       <CardBottomSheet isVisible={createFormIsVisible} onBackdropPress={() => setCreateFormIsVisible(false)}>

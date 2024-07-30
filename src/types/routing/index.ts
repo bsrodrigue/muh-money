@@ -18,4 +18,5 @@ export type RootStackParamList = {
     token: string;
   };
   Accounts: any;
+  Budgets: any;
 };

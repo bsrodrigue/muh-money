@@ -8,17 +8,19 @@ import { RootStackParamList } from "../../types";
 import { HomeScreen } from "../HomeScreen";
 import { ViewAccountScreen } from "../ViewAccountScreen";
 import { AccountsScreen } from "../AccountsScreen";
+import { BudgetsScreen } from "../BudgetsScreen";
 
 interface TabIconProps {
   icon: string;
   focused: boolean;
+  type?: string;
 }
 
-function TabIcon({ icon, focused }: TabIconProps) {
+function TabIcon({ icon, focused, type = "font-awesome" }: TabIconProps) {
   const { theme: { colors: { black, greyOutline } } } = useTheme();
 
   return (
-    <Icon color={focused ? black : greyOutline} name={icon} type="font-awesome-5" />
+    <Icon color={focused ? black : greyOutline} name={icon} type={type} />
   );
 }
 
@@ -69,10 +71,17 @@ export default function MainScreen({ navigation }: MainScreenProps) {
         <Tab.Screen
           options={{
             tabBarLabel: "Accounts",
-            tabBarIcon: ({ focused }) => <TabIcon icon="wallet" focused={focused} />,
+            tabBarIcon: ({ focused }) => <TabIcon icon="wallet" type="material" focused={focused} />,
           }}
           name="Accounts"
           component={AccountsScreen} />
+        <Tab.Screen
+          options={{
+            tabBarLabel: "Budgets",
+            tabBarIcon: ({ focused }) => <TabIcon icon="savings" type="material" focused={focused} />,
+          }}
+          name="Budgets"
+          component={BudgetsScreen} />
         <Tab.Screen
           options={{
             tabBarLabel: "Profile",

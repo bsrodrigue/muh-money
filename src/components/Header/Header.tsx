@@ -1,7 +1,6 @@
 import { Icon, useTheme } from "@rneui/themed";
 import { TouchableOpacity, View, Text } from "react-native";
 import { Avatar } from "@rneui/base";
-import { assets } from "../../assets";
 
 type HeaderProps = {
   searchMode?: boolean;
@@ -30,7 +29,7 @@ export default function Header({ onPressLogout }: HeaderProps) {
         />
         <View >
           <Text style={{ color: white, fontSize: 12, opacity: 0.5 }}  >Welcome back</Text>
-          <Text style={{ color: white, fontSize: 25, fontWeight: "bold" }}>Rachid BADINI</Text>
+          <Text style={{ color: white, fontSize: 25, fontWeight: "bold" }}>Bazie Maimouna</Text>
         </View>
       </View>
       <TouchableOpacity

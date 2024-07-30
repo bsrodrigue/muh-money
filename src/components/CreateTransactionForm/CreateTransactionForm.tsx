@@ -39,8 +39,7 @@ export default function CreateTransactionForm() {
         ))}
       </Row>
 
-
-      <TextInput label={`${transactionTypes} name`} />
+      <TextInput label={`${transactionType} name`} />
 
       <Row style={{ gap: 5 }}>
         <TextInput wrapperStyle={{ flexGrow: 1 }} label="Amount" keyboardType="numeric" />
@@ -84,6 +83,7 @@ export default function CreateTransactionForm() {
           <Text style={{ fontWeight: "bold", opacity: 0.5 }}>07:50 PM</Text>
         </View>
       </Row>
+
       <Button title="Submit" />
     </ExpandingView>
   );
