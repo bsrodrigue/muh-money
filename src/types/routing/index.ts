@@ -19,4 +19,5 @@ export type RootStackParamList = {
   };
   Accounts: any;
   Budgets: any;
+  Categories: any;
 };

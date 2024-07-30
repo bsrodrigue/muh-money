@@ -5,7 +5,6 @@ import { CardBottomSheet, CreateTransactionForm, EditTransactionForm, ExpandingV
 import { View, Text, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import { useTheme } from "@rneui/themed";
 import { FAB } from "@rneui/base";
-import { TransactionType } from "../../types/models";
 import { transactions } from "../../mock";
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
@@ -26,7 +25,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
     <ExpandingView style={{ backgroundColor: white }}>
       <View style={{ position: "relative", marginBottom: "25%" }}>
         <ScreenDivider />
-
         <View style={{
           backgroundColor: black,
           height: 100,

@@ -6,9 +6,9 @@ import { StyleSheet, View } from "react-native";
 import { Header, LogoutDialog } from "../../components";
 import { RootStackParamList } from "../../types";
 import { HomeScreen } from "../HomeScreen";
-import { ViewAccountScreen } from "../ViewAccountScreen";
 import { AccountsScreen } from "../AccountsScreen";
 import { BudgetsScreen } from "../BudgetsScreen";
+import { CategoriesScreen } from "../CategoriesScreen";
 
 interface TabIconProps {
   icon: string;
@@ -84,11 +84,11 @@ export default function MainScreen({ navigation }: MainScreenProps) {
           component={BudgetsScreen} />
         <Tab.Screen
           options={{
-            tabBarLabel: "Profile",
-            tabBarIcon: ({ focused }) => <TabIcon icon="user" focused={focused} />,
+            tabBarLabel: "Categories",
+            tabBarIcon: ({ focused }) => <TabIcon icon="tag" type="antdesign" focused={focused} />,
           }}
-          name="Profile"
-          component={ViewAccountScreen} />
+          name="Categories"
+          component={CategoriesScreen} />
       </Tab.Navigator>
     </View >
   )

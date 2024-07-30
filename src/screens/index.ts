@@ -12,5 +12,6 @@ export { SetupAccountScreen } from "./SetupAccountScreen";
 export { SetupAccountSuccessScreen } from "./SetupAccountSuccessScreen";
 export { SuccessScreen } from "./SuccessScreen";
 export { ViewAccountScreen } from "./ViewAccountScreen";
-export { AccountsScreen } from './AccountsScreen' 
-export { Budgets } from './Budgets' 
+export { AccountsScreen } from './AccountsScreen'
+export { CategoriesScreen } from './CategoriesScreen'
+export { BudgetsScreen } from './BudgetsScreen' 

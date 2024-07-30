@@ -15,9 +15,10 @@ export default function DateTimePicker({ date, mode, errorMessage, onChange }: D
   const onOpenDatePicker = () => {
     DateTimePickerAndroid.open({
       mode,
-      value: date, onChange: (_e, date) => {
+      value: date ?? new Date(),
+      onChange: (_e, date) => {
         onChange(date);
-      }
+      },
     });
   }
 
@@ -27,9 +28,9 @@ export default function DateTimePicker({ date, mode, errorMessage, onChange }: D
       style={{ marginVertical: 10 }}>
       <TextInput
         disabled
-        placeholder="Veuillez choisir votre date de naissance"
+        placeholder="Press to select a date"
         errorMessage={errorMessage}
-        value={mom(date).format("dddd DD MMMM y")}
+        value={date ? mom(date).format("dddd DD MMMM y") : null}
       />
     </TouchableOpacity>
   )

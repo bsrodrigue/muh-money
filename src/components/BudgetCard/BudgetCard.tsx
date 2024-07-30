@@ -7,11 +7,12 @@ interface BudgetCardProps {
   budget: Budget;
 }
 
-
-const borderRadius = 10;
 export default function BudgetCard({ budget: { type, title, balance } }: BudgetCardProps) {
   const { theme: { colors: { white, success, error, warning, greyOutline } } } = useTheme();
+  const borderRadius = 10;
   const currentBalance = 20_000;
+
+  const truncatedTitle = title.length > 20 ? title.slice(0, 20) + "..." : title;
 
   const percentage = ((currentBalance / balance) * 100).toFixed();
   const width = `${percentage}%`;
@@ -24,8 +25,6 @@ export default function BudgetCard({ budget: { type, title, balance } }: BudgetC
     return colors[index];
   }
 
-  const truncatedTitle = title.length > 20 ? title.slice(0, 20) + "..." : title;
-
   const color = getColorByPercentage(parseInt(percentage));
 
   return (
@@ -35,7 +34,6 @@ export default function BudgetCard({ budget: { type, title, balance } }: BudgetC
         alignItems: "center",
       }}>
         <View>
-          <Text style={{ opacity: 0.5, fontWeight: "normal" }}>{type}</Text>
           <Text style={{ fontWeight: "bold", fontSize: 20 }}>{truncatedTitle}</Text>
         </View>
 

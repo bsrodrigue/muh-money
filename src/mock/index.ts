@@ -1,19 +1,35 @@
-import { Budget, Transaction } from "../types/models";
+import { Account, Budget, Transaction } from "../types/models";
+
+export const accounts: Account[] = [
+  {
+    title: "Orange Money",
+    type: "Mobile Money",
+    balance: 65_025,
+  },
+  {
+    title: "Moov Money",
+    type: "Mobile Money",
+    balance: 25_350,
+  },
+  {
+    title: "Base Money",
+    type: "Cash",
+    balance: 5_750,
+  },
+];
 
 export const budgets: Budget[] = [
   {
     title: "Daily Food",
-    type: "Basic",
     balance: 175_000,
+    linkedAccount: "Orange Money",
   },
   {
     title: "Electricity Bills",
-    type: "Household",
     balance: 20_000,
   },
   {
     title: "FromSoftware future DLC releases",
-    type: "Important",
     balance: 50_000,
   },
 ];

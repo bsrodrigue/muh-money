@@ -9,7 +9,6 @@ export interface ID {
 
 export type TransactionType = "Expense" | "Income" | "Transfer";
 export type AccountType = "Cash" | "Bank" | "Mobile Money";
-export type BudgetType = "Basic" | "Important" | "Household";
 
 export interface Transaction {
   uuid?: string;
@@ -21,9 +20,10 @@ export interface Transaction {
 
 export interface Budget {
   uuid?: string;
-  type: BudgetType;
   title: string;
   balance?: number;
+  limitDate?: string;
+  linkedAccount?: string;
 }
 
 export interface Account {

@@ -5,25 +5,7 @@ import { AccountCard, CardBottomSheet, CreateAccountForm, EditAccountForm, Expan
 import { View, FlatList, Dimensions, TouchableOpacity } from "react-native";
 import { useTheme } from "@rneui/themed";
 import { useState } from "react";
-import { Account } from "../../types/models";
-
-const accounts: Account[] = [
-  {
-    title: "Orange Money",
-    type: "Mobile Money",
-    balance: 65_025,
-  },
-  {
-    title: "Moov Money",
-    type: "Mobile Money",
-    balance: 25_350,
-  },
-  {
-    title: "Base Money",
-    type: "Cash",
-    balance: 5_750,
-  },
-];
+import { accounts } from "../../mock";
 
 type AccountsScreenProps = NativeStackScreenProps<RootStackParamList, 'Accounts'>;
 

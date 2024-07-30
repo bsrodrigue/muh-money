@@ -9,32 +9,28 @@ import { TextInput } from '../Input';
 import { Button } from '../Button';
 import { accounts } from '../../mock';
 import { DateTimePicker } from '../DateTimePicker';
+import { Budget } from '../../types/models';
 
+interface EditBudgetFormProps {
+  budget: Budget;
+};
 
-export default function CreateBudgetForm() {
-  const { theme: { colors: { primary } } } = useTheme();
+export default function EditBudgetForm({ budget: { title, balance, linkedAccount: defaultLinkedAccount, limitDate } }: EditBudgetFormProps) {
+  const { theme: { colors: { primary, error, black } } } = useTheme();
   const [optionsEnabled, setOptionsEnabled] = useState(false);
-  const [linkedAccount, setLinkedAccount] = useState("");
-  const [dateLimit, setDateLimit] = useState<Date>(new Date());
+  const [linkedAccount, setLinkedAccount] = useState(defaultLinkedAccount);
+  const [dateLimit, setDateLimit] = useState<Date>(null);
 
   return (
     <ExpandingView style={{ paddingHorizontal: 10 }}>
       <Row style={{ justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Create Budget</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Edit Budget</Text>
         <ToggleButton onChange={(active) => setOptionsEnabled(active)} />
       </Row>
 
-      <TextInput label={`Budget name`} />
-      <TextInput label={`Budget Limit`} keyboardType='numeric' />
+      <TextInput label={`Budget name`} defaultValue={title} />
+      <TextInput label={`Budget Limit`} keyboardType='numeric' defaultValue={balance.toString()} />
 
-      {
-        optionsEnabled && (
-          <View>
-            <Text style={{ fontWeight: "bold", fontSize: 14, marginBottom: -10 }}>Date Limit</Text>
-            <DateTimePicker date={dateLimit} mode="date" onChange={(value) => setDateLimit(value)} />
-          </View>
-        )
-      }
 
       <Text style={{ fontWeight: "bold", fontSize: 14 }}>Linked Account</Text>
       <FlatList
@@ -56,6 +52,27 @@ export default function CreateBudgetForm() {
             active={linkedAccount === item.title} key={index} />
         )}
       />
+
+      {
+        optionsEnabled && (
+          <>
+            <View>
+              <Text style={{ fontWeight: "bold", fontSize: 14, marginBottom: -10 }}>Date Limit</Text>
+              <DateTimePicker date={dateLimit} mode="date" onChange={(value) => setDateLimit(value)} />
+            </View>
+
+            <View style={{ marginVertical: 10 }}>
+              <Button color={error} titleStyle={{ color: black, opacity: 0.5, fontWeight: "bold" }}>Delete Budget</Button>
+              <Text style={{ fontWeight: "bold", fontSize: 12, color: error, marginTop: 5 }}>
+                Warning: Deleting your budget will also lead to losing all your related transactions
+              </Text>
+            </View>
+
+          </>
+        )
+      }
+
+
 
       <Button title="Submit" />
     </ExpandingView>

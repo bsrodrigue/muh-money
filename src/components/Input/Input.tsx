@@ -55,7 +55,7 @@ const TextInput = forwardRef(({ onChange, wrapperStyle, label, inputStyle, error
         }
         disabledInputStyle={{
           fontSize: 18,
-          fontFamily: "Quicksand-600",
+          fontFamily: "font-600",
           opacity: 1
         }}
         inputContainerStyle={{

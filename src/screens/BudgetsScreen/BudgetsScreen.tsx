@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
-import { AccountCard, BudgetCard, CardBottomSheet, CreateAccountForm, CreateBudgetForm, EditAccountForm, ExpandingView, ScreenDivider } from "../../components"
+import { BudgetCard, CardBottomSheet, CreateBudgetForm, EditBudgetForm, ExpandingView, ScreenDivider } from "../../components"
 import { FAB } from "@rneui/base";
 import { View, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import { useTheme } from "@rneui/themed";
@@ -13,6 +13,7 @@ export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps)
   const { theme: { colors: { black, primary } } } = useTheme();
   const { height } = Dimensions.get("window");
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
+  const [editingBudget, setEditingBudget] = useState(null);
 
   return (
     <ExpandingView>
@@ -30,7 +31,7 @@ export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps)
             data={budgets}
             keyExtractor={(_item, number) => number.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity>
+              <TouchableOpacity onLongPress={() => setEditingBudget(item)}>
                 <BudgetCard budget={item} />
               </TouchableOpacity>
             )} />
@@ -43,8 +44,8 @@ export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps)
         <CreateBudgetForm />
       </CardBottomSheet>
 
-      <CardBottomSheet isVisible={false} onBackdropPress={() => (null)}>
-        <EditAccountForm account={null} />
+      <CardBottomSheet isVisible={Boolean(editingBudget)} onBackdropPress={() => setEditingBudget(null)}>
+        <EditBudgetForm budget={editingBudget} />
       </CardBottomSheet>
     </ExpandingView>
   )

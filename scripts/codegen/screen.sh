@@ -13,7 +13,7 @@ cd "$SCRIPT_DIR"
 
 WORK_DIR="../../src"
 
-SCREEN_NAME="$1"
+SCREEN_NAME="$1Screen"
 SCREEN_NAME_PREFIX="$1"
 SCREENS_DIR="$WORK_DIR/screens"
 
