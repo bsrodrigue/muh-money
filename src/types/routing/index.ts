@@ -17,5 +17,5 @@ export type RootStackParamList = {
   RegisterSuccess: {
     token: string;
   };
-  Account: any;
+  Accounts: any;
 };

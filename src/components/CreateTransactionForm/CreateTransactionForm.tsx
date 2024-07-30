@@ -1,7 +1,6 @@
 import { useTheme } from '@rneui/themed';
 import { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import Animated, { useSharedValue } from 'react-native-reanimated';
 import { ExpandingView } from '../ExpandingView';
 import { Row } from '../Row';
 import { ToggleButton } from '../ToggleButton';
@@ -11,16 +10,7 @@ import { Icon } from '@rneui/base';
 import { Button } from '../Button';
 import { TransactionType } from '../../types/models';
 import { transactionTypeColors } from '../../config';
-
-const categories = [
-  "Electricity",
-  "Water",
-  "Internet",
-  "Fuel",
-  "Clothes",
-  "Gift",
-  "Uncategorized"
-];
+import { CategorySelect } from '../CategorySelect';
 
 const transactionTypes = [
   "Expense",
@@ -28,14 +18,10 @@ const transactionTypes = [
   "Transfer"
 ];
 
-interface CreateTransactionFormProps {
-  type: TransactionType;
-  onPressType?: (type: TransactionType) => void;
-}
-
-export default function CreateTransactionForm({ type = "Expense", onPressType }: CreateTransactionFormProps) {
+export default function CreateTransactionForm() {
   const { theme: { colors: { primary } } } = useTheme();
   const [optionsEnabled, setOptionsEnabled] = useState(false);
+  const [transactionType, setTransactionType] = useState<TransactionType>("Expense");
 
   return (
     <ExpandingView style={{ paddingHorizontal: 10 }}>
@@ -46,24 +32,26 @@ export default function CreateTransactionForm({ type = "Expense", onPressType }:
 
       <Row style={{ gap: 5, marginVertical: 10 }}>
         {transactionTypes.map((filter, index) => (
-          <FilterBadge onPress={onPressType} activeColor={transactionTypeColors[type] ?? primary} label={filter} active={type === filter} key={index} />
+          <FilterBadge
+            onPress={(value) => setTransactionType(value as TransactionType)}
+            activeColor={transactionTypeColors[transactionType] ?? primary}
+            label={filter} active={transactionType === filter} key={index} />
         ))}
       </Row>
 
 
-      <TextInput label={`${type} name`} />
+      <TextInput label={`${transactionTypes} name`} />
 
       <Row style={{ gap: 5 }}>
         <TextInput wrapperStyle={{ flexGrow: 1 }} label="Amount" keyboardType="numeric" />
         {
-          type !== "Transfer" && (
+          transactionType !== "Transfer" && (
             <CategorySelect />
           )
         }
       </Row>
-
       {
-        type === "Transfer" && (
+        transactionType === "Transfer" && (
           <View style={{ flexGrow: 1, justifyContent: "space-between" }}>
             <Text style={{
               fontWeight: "bold",
@@ -98,45 +86,5 @@ export default function CreateTransactionForm({ type = "Expense", onPressType }:
       </Row>
       <Button title="Submit" />
     </ExpandingView>
-  );
-}
-
-function CategorySelect() {
-  const { theme: { colors: { primary } } } = useTheme();
-  const [categoryIndex, setCategoryIndex] = useState(0);
-  const fontSize = useSharedValue(14);
-
-  const handleNextCategory = () => {
-    if (categoryIndex >= categories.length - 1) return;
-    setCategoryIndex(categoryIndex + 1);
-  }
-
-  const handlePreviousCategory = () => {
-    if (categoryIndex <= 0) return;
-    setCategoryIndex(categoryIndex - 1);
-  }
-
-  return (
-    <View style={{ flexGrow: 1, justifyContent: "space-between" }}>
-      <Text style={{
-        fontWeight: "bold",
-      }}>Category</Text>
-      <Row style={{ justifyContent: "space-between", alignItems: "center", flex: 1 }}>
-        <TouchableOpacity onPress={handlePreviousCategory}>
-          <Icon name="arrow-left" color={primary} size={35} />
-        </TouchableOpacity>
-        <Animated.Text
-          style={{
-            fontWeight: "bold",
-            fontSize,
-            color: primary
-          }}>
-          {categories[categoryIndex]}
-        </Animated.Text>
-        <TouchableOpacity onPress={handleNextCategory}>
-          <Icon name="arrow-right" color={primary} size={35} />
-        </TouchableOpacity>
-      </Row>
-    </View>
   );
 }

@@ -9,12 +9,21 @@ export interface ID {
 
 export type TransactionType = "Expense" | "Income" | "Transfer";
 
+export type AccountType = "Cash" | "Bank" | "Mobile Money";
+
 export interface Transaction {
-  id?: number;
+  uuid?: string;
   title: string;
   category?: string;
   type: TransactionType;
   amount: number;
+}
+
+export interface Account {
+  uuid?: string;
+  type: AccountType;
+  title: string;
+  balance?: number;
 }
 
 export interface ResultPagination {

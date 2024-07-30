@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
 import React, { useState } from "react";
-import { CardBottomSheet, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, TotalBalanceCard, TransactionHistoryItem } from "../../components";
+import { CardBottomSheet, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, ScreenDivider, TotalBalanceCard, TransactionHistoryItem } from "../../components";
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { useTheme } from "@rneui/themed";
 import { FAB } from "@rneui/base";
@@ -9,8 +9,6 @@ import { TransactionType } from "../../types/models";
 import { transactions } from "../../mock";
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
-
-const dividerRadius = 25;
 
 const timeFilters = [
   "Today",
@@ -20,21 +18,13 @@ const timeFilters = [
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   const { theme: { colors: { white, black, primary } } } = useTheme();
-  const [transactionType, setTransactionType] = useState<TransactionType>("Expense");
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
 
   return (
     <ExpandingView style={{ backgroundColor: white }}>
       <View style={{ position: "relative", marginBottom: "25%" }}>
-        <View style={{ backgroundColor: black }}>
-          <View style={{
-            backgroundColor: white, width: "70%",
-            height: 5, borderTopRightRadius: dividerRadius,
-            borderBottomRightRadius: dividerRadius,
-            marginBottom: 25
-          }} />
-        </View>
+        <ScreenDivider />
 
         <View style={{
           backgroundColor: black,
@@ -81,7 +71,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       <FAB onPress={() => setCreateFormIsVisible(true)} title="Create Transaction" size="small" color={primary} placement="right" titleStyle={{ fontSize: 12 }} />
 
       <CardBottomSheet isVisible={createFormIsVisible} onBackdropPress={() => setCreateFormIsVisible(false)}>
-        <CreateTransactionForm type={transactionType} onPressType={(type) => setTransactionType(type)} />
+        <CreateTransactionForm />
       </CardBottomSheet>
 
       <CardBottomSheet isVisible={Boolean(editingTransaction)} onBackdropPress={() => setEditingTransaction(null)}>
