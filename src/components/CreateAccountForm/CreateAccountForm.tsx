@@ -3,24 +3,37 @@ import { useState } from 'react';
 import { Text } from 'react-native';
 import { ExpandingView } from '../ExpandingView';
 import { Row } from '../Row';
-import { ToggleButton } from '../ToggleButton';
 import { FilterBadge } from '../FilterBadge';
 import { TextInput } from '../Input';
 import { Button } from '../Button';
-import { AccountType } from '../../types/models';
+import { Account, AccountType } from '../../types/models';
 import { accountTypes } from '../../constants';
+import Crypto from '../../lib/crypto';
 
+interface CreateAccountFormProps {
+  onCreate: (account: Account) => void;
+}
 
-export default function CreateAccountForm() {
+export default function CreateAccountForm({ onCreate }: CreateAccountFormProps) {
   const { theme: { colors: { primary } } } = useTheme();
-  const [optionsEnabled, setOptionsEnabled] = useState(false);
   const [accountType, setAccountType] = useState<AccountType>("Cash");
+  const [title, setTitle] = useState("");
+  const [initialAmount, setInitialAmount] = useState("");
+
+  const onSubmit = () => {
+    const uuid = Crypto.generateRandomUUID();
+    const data: Account = {
+      uuid,
+      type: accountType,
+      title, balance: parseFloat(initialAmount),
+    };
+    onCreate(data);
+  }
 
   return (
     <ExpandingView style={{ paddingHorizontal: 10 }}>
       <Row style={{ justifyContent: "space-between", alignItems: "center" }}>
         <Text style={{ fontWeight: "bold", fontSize: 18 }}>Create Account</Text>
-        <ToggleButton onChange={(active) => setOptionsEnabled(active)} />
       </Row>
 
       <Row style={{ gap: 5, marginVertical: 10 }}>
@@ -32,10 +45,10 @@ export default function CreateAccountForm() {
         ))}
       </Row>
 
-      <TextInput label={`${accountType} name`} />
-      <TextInput label={`Initial Amount`} />
+      <TextInput label={`${accountType} name`} onChangeText={setTitle} />
+      <TextInput label={`Initial Amount`} onChangeText={setInitialAmount} keyboardType="numeric" />
 
-      <Button title="Submit" />
+      <Button title="Submit" onPress={onSubmit} />
     </ExpandingView>
   );
 }

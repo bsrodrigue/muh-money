@@ -4,16 +4,23 @@ import { FAB } from "@rneui/base";
 import { AccountCard, CardBottomSheet, CreateAccountForm, EditAccountForm, ExpandingView, ScreenDivider } from "../../components"
 import { View, FlatList, Dimensions, TouchableOpacity } from "react-native";
 import { useTheme } from "@rneui/themed";
-import { useState } from "react";
-import { accounts } from "../../mock";
+import { useEffect, useState } from "react";
+import { useAccountStore } from "../../stores";
+import { useAsyncStorage } from "../../lib/storage";
 
 type AccountsScreenProps = NativeStackScreenProps<RootStackParamList, 'Accounts'>;
 
 export default function AccountsScreen({ navigation }: AccountsScreenProps) {
-  const { theme: { colors: { black, primary } } } = useTheme();
+  const { theme: { colors: { black, primary, white } } } = useTheme();
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
   const [editingAccount, setEditingAccount] = useState(null);
   const { height } = Dimensions.get("window");
+  const { accounts, createAccount, updateAccount, deleteAccount } = useAccountStore();
+  const { storeData } = useAsyncStorage();
+
+  useEffect(() => {
+    storeData('accounts', accounts);
+  }, [accounts]);
 
   return (
     <ExpandingView>
@@ -43,11 +50,25 @@ export default function AccountsScreen({ navigation }: AccountsScreenProps) {
       <FAB onPress={() => setCreateFormIsVisible(true)} title="Create Account" size="small" color={primary} placement="right" titleStyle={{ fontSize: 12 }} />
 
       <CardBottomSheet isVisible={createFormIsVisible} onBackdropPress={() => setCreateFormIsVisible(false)}>
-        <CreateAccountForm />
+        <CreateAccountForm
+          onCreate={(account) => {
+            createAccount(account);
+            setCreateFormIsVisible(false);
+          }} />
       </CardBottomSheet>
 
       <CardBottomSheet isVisible={Boolean(editingAccount)} onBackdropPress={() => setEditingAccount(null)}>
-        <EditAccountForm account={editingAccount} />
+        <EditAccountForm
+          account={editingAccount}
+          onEdit={(account) => {
+            updateAccount(account);
+            setEditingAccount(null);
+          }}
+          onDelete={(uuid) => {
+            deleteAccount(uuid);
+            setEditingAccount(null);
+          }}
+        />
       </CardBottomSheet>
 
     </ExpandingView>

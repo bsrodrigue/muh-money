@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { View, ViewStyle } from "react-native";
+import { StyleProp, View, ViewStyle } from "react-native";
 
 interface ExpandingViewProps {
   children?: ReactNode;

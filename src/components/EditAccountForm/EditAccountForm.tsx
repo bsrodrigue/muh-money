@@ -1,6 +1,6 @@
 import { useTheme } from '@rneui/themed';
 import { useState } from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { ExpandingView } from '../ExpandingView';
 import { Row } from '../Row';
 import { ToggleButton } from '../ToggleButton';
@@ -12,12 +12,20 @@ import { accountTypes } from '../../constants';
 
 interface EditAccountFormProps {
   account: Account;
-  onPressType?: (type: AccountType) => void;
+  onEdit: (account: Account) => void;
+  onDelete: (uuid: string) => void;
 }
 
-export default function EditAccountForm({ account, onPressType }: EditAccountFormProps) {
-  const { theme: { colors: { primary } } } = useTheme();
+export default function EditAccountForm({ account, onEdit, onDelete }: EditAccountFormProps) {
+  const { theme: { colors: { primary, error, black } } } = useTheme();
   const [optionsEnabled, setOptionsEnabled] = useState(false);
+  const [title, setTitle] = useState(account.title);
+  const [type, setType] = useState(account.type);
+
+  const onSubmit = () => {
+    const data: Account = Object.assign(account, { title, type });
+    onEdit(data);
+  }
 
   return (
     <ExpandingView style={{ paddingHorizontal: 10 }}>
@@ -28,13 +36,24 @@ export default function EditAccountForm({ account, onPressType }: EditAccountFor
 
       <Row style={{ gap: 5, marginVertical: 10 }}>
         {accountTypes.map((filter, index) => (
-          <FilterBadge onPress={onPressType} activeColor={primary} label={filter} active={account.type === filter} key={index} />
+          <FilterBadge onPress={(value) => setType(value as AccountType)} activeColor={primary} label={filter} active={type === filter} key={index} />
         ))}
       </Row>
 
-      <TextInput label={`Account name`} defaultValue={account.title} />
+      <TextInput label={`Account name`} defaultValue={account.title} onChangeText={setTitle} />
 
-      <Button title="Submit" />
+      {
+        optionsEnabled && (
+          <View style={{ marginVertical: 10 }}>
+            <Button onPress={() => onDelete(account.uuid)} color={error} titleStyle={{ color: black, opacity: 0.5, fontWeight: "bold" }}>Delete Account</Button>
+            <Text style={{ fontWeight: "bold", fontSize: 12, color: error, marginTop: 5 }}>
+              Warning: Deleting your account will also lead to losing all your related transactions
+            </Text>
+          </View>
+        )
+      }
+
+      <Button onPress={onSubmit} title="Submit" />
     </ExpandingView>
   );
 }
