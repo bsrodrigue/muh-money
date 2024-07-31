@@ -15,12 +15,12 @@ export default function AccountsScreen({ navigation }: AccountsScreenProps) {
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
   const [editingAccount, setEditingAccount] = useState(null);
   const { height } = Dimensions.get("window");
-  const { accounts, createAccount, updateAccount, deleteAccount } = useAccountStore();
+  const { items, create, update, remove } = useAccountStore();
   const { storeData } = useAsyncStorage();
 
   useEffect(() => {
-    storeData('accounts', accounts);
-  }, [accounts]);
+    storeData('accounts', items);
+  }, [items]);
 
   return (
     <ExpandingView>
@@ -35,7 +35,7 @@ export default function AccountsScreen({ navigation }: AccountsScreenProps) {
             contentContainerStyle={{
               paddingBottom: 50
             }}
-            data={accounts}
+            data={items}
             keyExtractor={(_item, number) => number.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
@@ -52,7 +52,7 @@ export default function AccountsScreen({ navigation }: AccountsScreenProps) {
       <CardBottomSheet isVisible={createFormIsVisible} onBackdropPress={() => setCreateFormIsVisible(false)}>
         <CreateAccountForm
           onCreate={(account) => {
-            createAccount(account);
+            create(account);
             setCreateFormIsVisible(false);
           }} />
       </CardBottomSheet>
@@ -61,11 +61,11 @@ export default function AccountsScreen({ navigation }: AccountsScreenProps) {
         <EditAccountForm
           account={editingAccount}
           onEdit={(account) => {
-            updateAccount(account);
+            update(account);
             setEditingAccount(null);
           }}
           onDelete={(uuid) => {
-            deleteAccount(uuid);
+            remove(uuid);
             setEditingAccount(null);
           }}
         />

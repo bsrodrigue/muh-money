@@ -1,11 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CardBottomSheet, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, ScreenDivider, TotalBalanceCard, TransactionHistoryItem } from "../../components";
 import { View, Text, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import { useTheme } from "@rneui/themed";
 import { FAB } from "@rneui/base";
-import { transactions } from "../../mock";
+import { useTransactionStore } from "../../stores/transaction.store";
+import { useAsyncStorage } from "../../lib/storage";
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -20,6 +21,13 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
   const { height } = Dimensions.get("window");
+  const { storeData } = useAsyncStorage();
+
+  const { items: transactions, create, update, remove } = useTransactionStore();
+
+  useEffect(() => {
+    storeData("transactions", transactions);
+  }, [transactions]);
 
   return (
     <ExpandingView style={{ backgroundColor: white }}>
@@ -68,14 +76,34 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         </View>
       </View>
 
-      <FAB onPress={() => setCreateFormIsVisible(true)} title="Create Transaction" size="small" color={primary} placement="right" titleStyle={{ fontSize: 12 }} />
+      <FAB onPress={() =>
+        setCreateFormIsVisible(true)} title="Create Transaction" size="small" color={primary} placement="right" titleStyle={{ fontSize: 12 }} />
 
-      <CardBottomSheet isVisible={createFormIsVisible} onBackdropPress={() => setCreateFormIsVisible(false)}>
-        <CreateTransactionForm />
+      <CardBottomSheet
+        isVisible={createFormIsVisible}
+        onBackdropPress={() => setCreateFormIsVisible(false)}>
+        <CreateTransactionForm
+          onCreate={(transaction) => {
+            create(transaction);
+            setCreateFormIsVisible(false);
+          }} />
       </CardBottomSheet>
 
-      <CardBottomSheet isVisible={Boolean(editingTransaction)} onBackdropPress={() => setEditingTransaction(null)}>
-        <EditTransactionForm transaction={editingTransaction} />
+      <CardBottomSheet
+        isVisible={Boolean(editingTransaction)}
+        onBackdropPress={() => setEditingTransaction(null)}
+      >
+        <EditTransactionForm
+          transaction={editingTransaction}
+          onEdit={(transaction) => {
+            update(transaction);
+            setEditingTransaction(null);
+          }}
+          onDelete={(uuid) => {
+            remove(uuid);
+            setEditingTransaction(null);
+          }}
+        />
       </CardBottomSheet>
 
     </ExpandingView>

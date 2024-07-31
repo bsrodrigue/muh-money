@@ -5,14 +5,17 @@ import client from "../api/client";
 import { getJwtExpirationDate } from "../lib/jwt";
 import { useAsyncStorage } from "../lib/storage";
 import { Session } from "../types/auth";
-import { useAccountStore } from "../stores";
+import { useAccountStore, useBudgetStore } from "../stores";
+import { useTransactionStore } from "../stores/transaction.store";
 
 export default function useCachedResources() {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [session, setSession] = useState<Session>(null);
   const [onboarding, setOnboarding] = useState();
   const { getData } = useAsyncStorage();
-  const { setAccounts } = useAccountStore();
+  const { init: initAccounts } = useAccountStore();
+  const { init: initTransactions } = useTransactionStore();
+  const { init: initBudgets } = useBudgetStore();
 
   const quicksandFontConfig = {
     "font-regular": require("../assets/fonts/Quicksand-Regular.ttf"),
@@ -21,6 +24,16 @@ export default function useCachedResources() {
     "font-600": require("../assets/fonts/Quicksand-SemiBold.ttf"),
     "font-700": require("../assets/fonts/Quicksand-Bold.ttf"),
   };
+
+  async function loadData() {
+    const accounts = await getData("accounts");
+    const budgets = await getData("budgets");
+    const transactions = await getData("transactions");
+
+    const data = [accounts, budgets, transactions];
+
+    return data.map((d) => JSON.parse(d));
+  }
 
   useEffect(() => {
     async function loadResourcesAndDataAsync() {
@@ -33,12 +46,11 @@ export default function useCachedResources() {
           ...quicksandFontConfig,
         });
 
-        const savedAccounts = await getData("accounts");
-        const parsedAccounts = JSON.parse(savedAccounts)
+        const [accounts, budgets, transactions] = await loadData();
 
-        if (parsedAccounts instanceof Array) {
-          setAccounts(parsedAccounts);
-        }
+        initAccounts(accounts);
+        initBudgets(budgets);
+        initTransactions(transactions);
 
         const jsonSession = await getData("session");
         const session = JSON.parse(jsonSession) as Session;

@@ -5,14 +5,36 @@ import { Spacing } from '../Spacing';
 import { Row } from '../Row';
 import { ColorDot } from '../ColorDot';
 import { shadowStyle } from '../../themes/shadow';
+import { useBudgetStore, useAccountStore } from '../../stores';
+import { Account, Transaction } from '../../types/models';
+import { useTransactionStore } from '../../stores/transaction.store';
+import { baseCurrency } from '../../config';
+import { getRealBalanceFromAccount } from '../../lib/account';
 
 interface TotalBalanceCardProps {
 
 }
 
+function getRealTotalBalance(accounts: Account[], allTransactions: Transaction[]) {
+  let total = 0, incomes = 0, expenses = 0;
+
+  for (const account of accounts) {
+    const [t, i, e] = getRealBalanceFromAccount(account, allTransactions);
+    total += t;
+    incomes += i;
+    expenses += e;
+  }
+
+  return [total, incomes, expenses];
+}
+
 export default function TotalBalanceCard({ }: TotalBalanceCardProps) {
   const [_state, _setState] = useState(null); // Replace by your state...
   const { theme: { colors: { white, primary, success, error } } } = useTheme();
+  const { items: accounts } = useAccountStore();
+  const { items: transactions } = useTransactionStore();
+
+  const [total, incomes, expenses] = getRealTotalBalance(accounts, transactions);
 
   useEffect(() => {
     // Write your code here...
@@ -27,7 +49,7 @@ export default function TotalBalanceCard({ }: TotalBalanceCardProps) {
     }}>
       <View>
         <Text style={{ color: white, opacity: 0.5 }}>Total Balance</Text>
-        <Text style={{ color: white, fontWeight: "bold", fontSize: 25 }}>150.000 FCFA</Text>
+        <Text style={{ color: white, fontWeight: "bold", fontSize: 25 }}>{`${total.toLocaleString()} ${baseCurrency}`}</Text>
       </View>
 
       <Spacing vertical size={10} />
@@ -35,8 +57,8 @@ export default function TotalBalanceCard({ }: TotalBalanceCardProps) {
       <View>
         <Text style={{ color: white, marginBottom: 5, opacity: 0.5 }}>Activities</Text>
         <View style={{ flexDirection: "row", gap: 20 }}>
-          <SubCard label='Incomes' balanceString='+175.000 FCFA' color={success} />
-          <SubCard label='Expenses' balanceString='-25.000 FCFA' color={error} />
+          <SubCard label='Incomes' balanceString={`+${incomes.toLocaleString()} ${baseCurrency}`} color={success} />
+          <SubCard label='Expenses' balanceString={`-${expenses.toLocaleString()} ${baseCurrency}`} color={error} />
         </View>
       </View>
     </View>

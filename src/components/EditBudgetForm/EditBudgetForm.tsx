@@ -7,19 +7,29 @@ import { ToggleButton } from '../ToggleButton';
 import { FilterBadge } from '../FilterBadge';
 import { TextInput } from '../Input';
 import { Button } from '../Button';
-import { accounts } from '../../mock';
 import { DateTimePicker } from '../DateTimePicker';
 import { Budget } from '../../types/models';
+import { useAccountStore } from '../../stores';
 
 interface EditBudgetFormProps {
   budget: Budget;
+  onEdit: (budget: Budget) => void;
+  onDelete: (uuid: string) => void;
 };
 
-export default function EditBudgetForm({ budget: { title, balance, linkedAccount: defaultLinkedAccount, limitDate } }: EditBudgetFormProps) {
+export default function EditBudgetForm({ budget, onEdit, onDelete }: EditBudgetFormProps) {
   const { theme: { colors: { primary, error, black } } } = useTheme();
   const [optionsEnabled, setOptionsEnabled] = useState(false);
-  const [linkedAccount, setLinkedAccount] = useState(defaultLinkedAccount);
+  const [linkedAccount, setLinkedAccount] = useState(budget.linkedAccount);
   const [dateLimit, setDateLimit] = useState<Date>(null);
+  const [title, setTitle] = useState(budget.title);
+  const [limit, setLimit] = useState(budget.balance.toString());
+  const { items: accounts } = useAccountStore();
+
+  const onSubmit = () => {
+    const data: Budget = Object.assign(budget, { title, balance: parseFloat(limit), linkedAccount, dateLimit });
+    onEdit(data);
+  };
 
   return (
     <ExpandingView style={{ paddingHorizontal: 10 }}>
@@ -28,30 +38,34 @@ export default function EditBudgetForm({ budget: { title, balance, linkedAccount
         <ToggleButton onChange={(active) => setOptionsEnabled(active)} />
       </Row>
 
-      <TextInput label={`Budget name`} defaultValue={title} />
-      <TextInput label={`Budget Limit`} keyboardType='numeric' defaultValue={balance.toString()} />
+      <TextInput label={`Budget name`} defaultValue={title} onChangeText={setTitle} />
+      <TextInput label={`Budget Limit`} keyboardType='numeric' defaultValue={limit} onChangeText={setLimit} />
 
-
-      <Text style={{ fontWeight: "bold", fontSize: 14 }}>Linked Account</Text>
-      <FlatList
-        contentContainerStyle={{
-          gap: 10,
-          paddingVertical: 10
-        }}
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        data={accounts}
-        renderItem={({ item, index }) => (
-          <FilterBadge
-            onPress={(value) => {
-              const alreadySelected = (value == linkedAccount);
-              setLinkedAccount(alreadySelected ? "" : value)
+      {
+        accounts.length != 0 && (<>
+          <Text style={{ fontWeight: "bold", fontSize: 14 }}>Linked Account</Text>
+          <FlatList
+            contentContainerStyle={{
+              gap: 10,
+              paddingVertical: 10
             }}
-            activeColor={primary}
-            label={item.title}
-            active={linkedAccount === item.title} key={index} />
-        )}
-      />
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            data={accounts}
+            renderItem={({ item, index }) => (
+              <FilterBadge
+                onPress={(value) => {
+                  const alreadySelected = (value == linkedAccount);
+                  setLinkedAccount(alreadySelected ? "" : value)
+                }}
+                activeColor={primary}
+                label={item.title}
+                active={linkedAccount === item.title} key={index} />
+            )}
+          />
+
+        </>)
+      }
 
       {
         optionsEnabled && (
@@ -62,7 +76,7 @@ export default function EditBudgetForm({ budget: { title, balance, linkedAccount
             </View>
 
             <View style={{ marginVertical: 10 }}>
-              <Button color={error} titleStyle={{ color: black, opacity: 0.5, fontWeight: "bold" }}>Delete Budget</Button>
+              <Button onPress={() => onDelete(budget.uuid)} color={error} titleStyle={{ color: black, opacity: 0.5, fontWeight: "bold" }}>Delete Budget</Button>
               <Text style={{ fontWeight: "bold", fontSize: 12, color: error, marginTop: 5 }}>
                 Warning: Deleting your budget will also lead to losing all your related transactions
               </Text>
@@ -72,9 +86,7 @@ export default function EditBudgetForm({ budget: { title, balance, linkedAccount
         )
       }
 
-
-
-      <Button title="Submit" />
+      <Button title="Submit" onPress={onSubmit} />
     </ExpandingView>
   );
 }

@@ -35,7 +35,7 @@ export default function TransactionHistoryItem({ title, category, type, amount }
             <Icon style={{ opacity: 0.5 }} name="money" />
           </View>
           <View>
-            <Text style={{ fontWeight: "bold", fontSize: 10, opacity: 0.5 }}>{category}</Text>
+            <Text style={{ fontWeight: "bold", fontSize: 10, opacity: 0.5 }}>{category ?? "Transaction"}</Text>
             <Text style={{ fontWeight: "bold", fontSize: 12 }}>{title.length >= maxChars ? `${title.slice(0, maxChars)}...` : title}</Text>
           </View>
         </View>

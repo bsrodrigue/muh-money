@@ -16,6 +16,10 @@ export interface Transaction {
   category?: string;
   type: TransactionType;
   amount: number;
+  budgetId?: string;
+  accountId?: string;
+  date?: string;
+  time?: string;
 }
 
 export interface Budget {
@@ -23,7 +27,7 @@ export interface Budget {
   title: string;
   balance?: number;
   limitDate?: string;
-  linkedAccount?: string;
+  linkedAccount: string;
 }
 
 export interface Account {

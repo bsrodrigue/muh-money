@@ -4,8 +4,9 @@ import { BudgetCard, CardBottomSheet, CreateBudgetForm, EditBudgetForm, Expandin
 import { FAB } from "@rneui/base";
 import { View, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import { useTheme } from "@rneui/themed";
-import { budgets } from "../../mock";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useBudgetStore } from "../../stores";
+import { useAsyncStorage } from "../../lib/storage";
 
 type BudgetsScreenProps = NativeStackScreenProps<RootStackParamList, 'Budgets'>;
 
@@ -14,6 +15,13 @@ export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps)
   const { height } = Dimensions.get("window");
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
   const [editingBudget, setEditingBudget] = useState(null);
+
+  const { items, create, update, remove } = useBudgetStore();
+  const { storeData } = useAsyncStorage();
+
+  useEffect(() => {
+    storeData('budgets', items);
+  }, [items]);
 
   return (
     <ExpandingView>
@@ -28,7 +36,7 @@ export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps)
             contentContainerStyle={{
               paddingBottom: 50
             }}
-            data={budgets}
+            data={items}
             keyExtractor={(_item, number) => number.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity onLongPress={() => setEditingBudget(item)}>
@@ -41,11 +49,25 @@ export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps)
       <FAB onPress={() => setCreateFormIsVisible(true)} title="Create Budget" size="small" color={primary} placement="right" titleStyle={{ fontSize: 12 }} />
 
       <CardBottomSheet isVisible={createFormIsVisible} onBackdropPress={() => setCreateFormIsVisible(false)}>
-        <CreateBudgetForm />
+        <CreateBudgetForm
+          onCreate={(budget) => {
+            create(budget);
+            setCreateFormIsVisible(false);
+          }} />
       </CardBottomSheet>
 
       <CardBottomSheet isVisible={Boolean(editingBudget)} onBackdropPress={() => setEditingBudget(null)}>
-        <EditBudgetForm budget={editingBudget} />
+        <EditBudgetForm
+          budget={editingBudget}
+          onEdit={(budget) => {
+            update(budget);
+            setEditingBudget(null);
+          }}
+          onDelete={(uuid) => {
+            remove(uuid);
+            setEditingBudget(null);
+          }}
+        />
       </CardBottomSheet>
     </ExpandingView>
   )
