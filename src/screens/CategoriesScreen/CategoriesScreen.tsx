@@ -37,24 +37,25 @@ export default function CategoriesScreen({ navigation, route }: CategoriesScreen
   const [editingCategory, setEditingCategory] = useState(null)
   const height = Dimensions.get('window').height
 
+  const family = iconFamilies[0];
+
   return (
     <ExpandingView>
       {
         <View style={{
-          height,
+          height: (height * 0.8)
         }}>
-          <Text>{iconFamilies[0]}</Text>
+          <Text>{family}</Text>
           <FlashList
             getItemType={(item) => typeof (item)}
             bounces
-            numColumns={5}
-            data={iconData[iconFamilies[0]]}
+            numColumns={3}
+            data={iconData[family]}
             estimatedItemSize={10000}
-            contentContainerStyle={{
-              padding: 20
-            }}
             renderItem={({ item }) =>
-              (<Icon name={item as string} type={familiesMapping[iconFamilies[0]]} />)} />
+            (<View>
+              <Icon name={item as string} type={familiesMapping[iconFamilies[0]]} />
+            </View>)} />
         </View>
       }
       <FAB

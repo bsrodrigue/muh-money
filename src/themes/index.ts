@@ -28,7 +28,7 @@ export const lightTheme = createTheme({
     Text: {
       style: [
         {
-          fontFamily: "font-regular"
+          fontFamily: "font-600"
         }
       ]
     }

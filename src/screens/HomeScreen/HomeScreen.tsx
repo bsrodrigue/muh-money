@@ -2,11 +2,12 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
 import React, { useEffect, useState } from "react";
 import { CardBottomSheet, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, ScreenDivider, TotalBalanceCard, TransactionHistoryItem } from "../../components";
-import { View, Text, FlatList, TouchableOpacity, Dimensions } from "react-native";
+import { View, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import { useTheme } from "@rneui/themed";
 import { FAB } from "@rneui/base";
 import { useTransactionStore } from "../../stores/transaction.store";
 import { useAsyncStorage } from "../../lib/storage";
+import { Text } from "../../components";
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -46,7 +47,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
 
       <View style={{ paddingHorizontal: 20, marginBottom: 10 }}>
         <View>
-          <Text style={{ fontWeight: "bold", opacity: 0.5, marginBottom: 10 }}>Transactions</Text>
+          <Text weight="700" style={{ opacity: 0.5, marginBottom: 10 }}>Transactions</Text>
           <Row style={{ gap: 5 }}>
             {timeFilters.map((filter, index) => (
               <FilterBadge label={filter} active={index === 1} key={index} />
@@ -77,7 +78,10 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       </View>
 
       <FAB onPress={() =>
-        setCreateFormIsVisible(true)} title="Create Transaction" size="small" color={primary} placement="right" titleStyle={{ fontSize: 12 }} />
+        setCreateFormIsVisible(true)}
+        title="Create Transaction"
+        size="small" color={primary}
+        placement="right" titleStyle={{ fontSize: 12, fontFamily: "font-700" }} />
 
       <CardBottomSheet
         isVisible={createFormIsVisible}

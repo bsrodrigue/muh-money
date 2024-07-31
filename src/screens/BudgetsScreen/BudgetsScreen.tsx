@@ -46,7 +46,10 @@ export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps)
         </View>
       </View>
 
-      <FAB onPress={() => setCreateFormIsVisible(true)} title="Create Budget" size="small" color={primary} placement="right" titleStyle={{ fontSize: 12 }} />
+      <FAB
+        onPress={() => setCreateFormIsVisible(true)}
+        title="Create Budget" size="small"
+        color={primary} placement="right" titleStyle={{ fontSize: 12, fontFamily: "font-700" }} />
 
       <CardBottomSheet isVisible={createFormIsVisible} onBackdropPress={() => setCreateFormIsVisible(false)}>
         <CreateBudgetForm

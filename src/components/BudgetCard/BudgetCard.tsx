@@ -1,10 +1,11 @@
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import { Budget } from '../../types/models';
 import { useTheme } from '@rneui/themed';
 import { Row } from '../Row';
 import { baseCurrency } from '../../config';
 import { useTransactionStore } from '../../stores/transaction.store';
 import { getRealBalanceFromBudget } from '../../lib/budget';
+import { Text } from "../Text";
 
 interface BudgetCardProps {
   budget: Budget;
@@ -39,24 +40,23 @@ export default function BudgetCard({ budget }: BudgetCardProps) {
         alignItems: "center",
       }}>
         <View>
-          <Text style={{ fontWeight: "bold", fontSize: 20 }}>{truncatedTitle}</Text>
+          <Text weight='300' style={{ fontSize: 20 }}>{truncatedTitle}</Text>
         </View>
 
-        <Text style={{ fontSize: 16, fontWeight: "bold", color }}>{width}</Text>
+        <Text weight='700' style={{ fontSize: 16, color }}>{width}</Text>
       </Row>
 
       <View style={{ marginVertical: 5 }}>
-        <Text style={{ opacity: 0.5, marginBottom: -5 }}>Total Balance</Text>
-        <Text style={{ fontSize: 30, fontWeight: "100" }}>{`${balance.toLocaleString()} FCFA`}</Text>
+        <Text weight='700' style={{ opacity: 0.5, marginBottom: -5 }}>Total Balance</Text>
+        <Text style={{ fontSize: 30, }}>{`${balance.toLocaleString()} FCFA`}</Text>
       </View>
 
       <View style={{ position: "relative", backgroundColor: greyOutline, height: 20, borderRadius }}>
         <View style={{ zIndex: 1, position: "absolute", width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}>
-          <Text style={{ fontSize: 14, fontWeight: "bold", opacity: 0.5 }}>{`${currentBalance.toLocaleString()} ${baseCurrency}`}</Text>
+          <Text weight='700' style={{ fontSize: 14, opacity: 0.5 }}>{`${currentBalance.toLocaleString()} ${baseCurrency}`}</Text>
         </View>
         <View style={{ height: "100%", width, backgroundColor: color, borderRadius }} />
       </View>
     </View>
   );
-
 }

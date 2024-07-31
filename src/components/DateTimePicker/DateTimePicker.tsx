@@ -24,7 +24,7 @@ export default function DateTimePicker({ label, date, mode, errorMessage, onChan
     });
   }
 
-  const format = (mode === "date") ? "DD/MM/YY" : "HH:MM";
+  const format = (mode === "date") ? "DD/MM/YY" : "HH:mm";
 
   return (
     <View style={[{ marginVertical: 10 }, containerStyle]}>
@@ -33,7 +33,10 @@ export default function DateTimePicker({ label, date, mode, errorMessage, onChan
         onPress={onOpenDatePicker}>
         <TextInput
           disabled
-          placeholder="Press to select a date"
+          placeholder={`Press to select a ${mode}`}
+          style={{
+            fontSize: 12
+          }}
           errorMessage={errorMessage}
           value={date ? mom(date).format(format) : null}
         />

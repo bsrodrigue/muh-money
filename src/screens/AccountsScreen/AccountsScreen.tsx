@@ -47,7 +47,11 @@ export default function AccountsScreen({ navigation }: AccountsScreenProps) {
         </View>
       </View>
 
-      <FAB onPress={() => setCreateFormIsVisible(true)} title="Create Account" size="small" color={primary} placement="right" titleStyle={{ fontSize: 12 }} />
+      <FAB
+        onPress={() => setCreateFormIsVisible(true)}
+        title="Create Account" size="small"
+        color={primary} placement="right"
+        titleStyle={{ fontSize: 12, fontFamily: "font-700" }} />
 
       <CardBottomSheet isVisible={createFormIsVisible} onBackdropPress={() => setCreateFormIsVisible(false)}>
         <CreateAccountForm

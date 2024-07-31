@@ -1,15 +1,16 @@
 import { useTheme } from '@rneui/themed';
 import { useState, useEffect } from 'react';
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import { Spacing } from '../Spacing';
 import { Row } from '../Row';
 import { ColorDot } from '../ColorDot';
 import { shadowStyle } from '../../themes/shadow';
-import { useBudgetStore, useAccountStore } from '../../stores';
+import { useAccountStore } from '../../stores';
 import { Account, Transaction } from '../../types/models';
 import { useTransactionStore } from '../../stores/transaction.store';
 import { baseCurrency } from '../../config';
 import { getRealBalanceFromAccount } from '../../lib/account';
+import { Text } from '../Text';
 
 interface TotalBalanceCardProps {
 
@@ -36,10 +37,6 @@ export default function TotalBalanceCard({ }: TotalBalanceCardProps) {
 
   const [total, incomes, expenses] = getRealTotalBalance(accounts, transactions);
 
-  useEffect(() => {
-    // Write your code here...
-  }, []);
-
   return (
     <View style={{
       backgroundColor: primary,
@@ -49,7 +46,7 @@ export default function TotalBalanceCard({ }: TotalBalanceCardProps) {
     }}>
       <View>
         <Text style={{ color: white, opacity: 0.5 }}>Total Balance</Text>
-        <Text style={{ color: white, fontWeight: "bold", fontSize: 25 }}>{`${total.toLocaleString()} ${baseCurrency}`}</Text>
+        <Text weight='700' style={{ color: white, fontSize: 25 }}>{`${total.toLocaleString()} ${baseCurrency}`}</Text>
       </View>
 
       <Spacing vertical size={10} />
@@ -57,8 +54,8 @@ export default function TotalBalanceCard({ }: TotalBalanceCardProps) {
       <View>
         <Text style={{ color: white, marginBottom: 5, opacity: 0.5 }}>Activities</Text>
         <View style={{ flexDirection: "row", gap: 20 }}>
-          <SubCard label='Incomes' balanceString={`+${incomes.toLocaleString()} ${baseCurrency}`} color={success} />
-          <SubCard label='Expenses' balanceString={`-${expenses.toLocaleString()} ${baseCurrency}`} color={error} />
+          <SubCard label='Incomes' balanceString={`${incomes.toLocaleString()} ${baseCurrency}`} color={success} />
+          <SubCard label='Expenses' balanceString={`${expenses.toLocaleString()} ${baseCurrency}`} color={error} />
         </View>
       </View>
     </View>
@@ -77,9 +74,9 @@ function SubCard({ label, balanceString, color }: SubCardProps) {
     <View style={[{ backgroundColor: white, padding: 10, flexGrow: 1, borderRadius: 5 }, shadowStyle]}>
       <Row style={{ alignItems: "center", gap: 5 }}>
         <ColorDot color={color} />
-        <Text style={{ fontWeight: "bold", fontSize: 12 }}>{label}</Text>
+        <Text weight='700' style={{ fontSize: 12 }}>{label}</Text>
       </Row>
-      <Text style={{ fontWeight: "bold" }}>
+      <Text>
         {balanceString}
       </Text>
     </View>

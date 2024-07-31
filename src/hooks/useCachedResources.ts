@@ -39,7 +39,6 @@ export default function useCachedResources() {
     async function loadResourcesAndDataAsync() {
       try {
 
-
         SplashScreen.preventAutoHideAsync();
 
         await loadAsync({

@@ -1,5 +1,6 @@
 import { useTheme } from '@rneui/themed';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import { Text } from '../Text';
 
 interface FilterBadgeProps {
   active?: boolean;
@@ -20,11 +21,12 @@ export default function FilterBadge({ label, active, activeColor, onPress }: Fil
         paddingVertical: 5,
         paddingHorizontal: 20
       }}>
-      <Text style={{
-        color: (active) ? white : black,
-        fontWeight: "bold",
-        opacity: (active) ? 1 : 0.5
-      }}>{label}</Text>
+      <Text
+        weight='700'
+        style={{
+          color: (active) ? white : black,
+          opacity: (active) ? 1 : 0.5
+        }}>{label}</Text>
     </TouchableOpacity>
   );
 }

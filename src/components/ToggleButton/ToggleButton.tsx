@@ -1,6 +1,7 @@
 import { useTheme } from "@rneui/themed";
 import Animated, { interpolate, interpolateColor, runOnJS, runOnUI, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
-import { Text, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
+import { Text } from "../Text";
 
 interface ToggleButtonProps {
   onChange?: (active: boolean) => void;
@@ -47,7 +48,7 @@ export default function ToggleButton({ onChange }: ToggleButtonProps) {
         runOnJS(onChange)(!isToggled);
       })();
     }}>
-      <Text style={{ opacity: 0.5, fontWeight: "bold", fontSize: 10 }}>Advanced options</Text>
+      <Text weight="700" style={{ opacity: 0.5, fontSize: 10 }}>Advanced options</Text>
       <Animated.View
         style={[toggleButtonAnimatedContainerStyle, {
           width: 40, height: 15, borderRadius: 25,

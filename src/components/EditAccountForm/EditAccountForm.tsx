@@ -1,6 +1,6 @@
 import { useTheme } from '@rneui/themed';
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { ExpandingView } from '../ExpandingView';
 import { Row } from '../Row';
 import { ToggleButton } from '../ToggleButton';
@@ -9,6 +9,7 @@ import { TextInput } from '../Input';
 import { Button } from '../Button';
 import { Account, AccountType } from '../../types/models';
 import { accountTypes } from '../../constants';
+import { Text } from '../Text';
 
 interface EditAccountFormProps {
   account: Account;
@@ -30,7 +31,7 @@ export default function EditAccountForm({ account, onEdit, onDelete }: EditAccou
   return (
     <ExpandingView style={{ paddingHorizontal: 10 }}>
       <Row style={{ justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Edit Account</Text>
+        <Text weight="700" style={{ fontSize: 18 }}>Edit Account</Text>
         <ToggleButton onChange={(active) => setOptionsEnabled(active)} />
       </Row>
 
@@ -45,8 +46,8 @@ export default function EditAccountForm({ account, onEdit, onDelete }: EditAccou
       {
         optionsEnabled && (
           <View style={{ marginVertical: 10 }}>
-            <Button onPress={() => onDelete(account.uuid)} color={error} titleStyle={{ color: black, opacity: 0.5, fontWeight: "bold" }}>Delete Account</Button>
-            <Text style={{ fontWeight: "bold", fontSize: 12, color: error, marginTop: 5 }}>
+            <Button onPress={() => onDelete(account.uuid)} color={error} titleStyle={{ color: black, opacity: 0.5, fontFamily: "font-700" }}>Delete Account</Button>
+            <Text weight="700" style={{ fontSize: 12, color: error, marginTop: 5 }}>
               Warning: Deleting your account will also lead to losing all your related transactions
             </Text>
           </View>

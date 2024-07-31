@@ -1,7 +1,8 @@
 import { Input, InputProps } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
 import { forwardRef } from "react";
-import { View, Text, ViewStyle } from "react-native";
+import { View, ViewStyle } from "react-native";
+import { Text } from "../Text";
 
 type TextInputProps = {
   name?: string;
@@ -18,9 +19,7 @@ const TextInput = forwardRef(({ onChange, wrapperStyle, label, inputStyle, error
     <View style={wrapperStyle}>
       {
         label && (
-          <Text style={{
-            fontWeight: "bold",
-          }}>{label}</Text>
+          <Text weight="700">{label}</Text>
         )
       }
       <Input

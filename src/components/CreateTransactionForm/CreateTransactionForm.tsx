@@ -1,6 +1,6 @@
 import { useTheme } from '@rneui/themed';
 import { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { ExpandingView } from '../ExpandingView';
 import { Row } from '../Row';
 import { FilterBadge } from '../FilterBadge';
@@ -13,11 +13,12 @@ import { DateTimePicker } from '../DateTimePicker';
 import { Selector } from '../Selector';
 import { useBudgetStore } from '../../stores';
 import Crypto from '../../lib/crypto';
+import { Text } from '../Text';
 
 const transactionTypes = [
   "Expense",
   "Income",
-  "Transfer"
+  // "Transfer"
 ];
 
 interface CreateTransactionFormProps {
@@ -48,8 +49,8 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
       time: time.toISOString(),
       amount: parseFloat(amount),
       type: transactionType,
-      accountId: budget?.linkedAccount,
-      budgetId
+      accountId: budget.linkedAccount,
+      budgetId: budget.uuid
     }
 
     onCreate(data);
@@ -58,7 +59,7 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
   return (
     <ExpandingView style={{ paddingHorizontal: 10 }}>
       <Row style={{ justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Create Transaction</Text>
+        <Text weight='700' style={{ fontSize: 18 }}>Create Transaction</Text>
       </Row>
 
       <Row style={{ gap: 5, marginVertical: 10 }}>

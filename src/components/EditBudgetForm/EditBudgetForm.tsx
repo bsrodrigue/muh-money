@@ -1,6 +1,6 @@
 import { useTheme } from '@rneui/themed';
 import { useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { ExpandingView } from '../ExpandingView';
 import { Row } from '../Row';
 import { ToggleButton } from '../ToggleButton';
@@ -10,6 +10,7 @@ import { Button } from '../Button';
 import { DateTimePicker } from '../DateTimePicker';
 import { Budget } from '../../types/models';
 import { useAccountStore } from '../../stores';
+import { Text } from '../Text';
 
 interface EditBudgetFormProps {
   budget: Budget;
@@ -20,21 +21,22 @@ interface EditBudgetFormProps {
 export default function EditBudgetForm({ budget, onEdit, onDelete }: EditBudgetFormProps) {
   const { theme: { colors: { primary, error, black } } } = useTheme();
   const [optionsEnabled, setOptionsEnabled] = useState(false);
-  const [linkedAccount, setLinkedAccount] = useState(budget.linkedAccount);
+  const [accountTitle, setAccountTitle] = useState(budget.linkedAccount);
   const [dateLimit, setDateLimit] = useState<Date>(null);
   const [title, setTitle] = useState(budget.title);
   const [limit, setLimit] = useState(budget.balance.toString());
   const { items: accounts } = useAccountStore();
 
   const onSubmit = () => {
-    const data: Budget = Object.assign(budget, { title, balance: parseFloat(limit), linkedAccount, dateLimit });
+    const account = accounts.find((account) => account.title === accountTitle);
+    const data: Budget = Object.assign(budget, { title, balance: parseFloat(limit), linkedAccount: account.uuid, dateLimit });
     onEdit(data);
   };
 
   return (
     <ExpandingView style={{ paddingHorizontal: 10 }}>
       <Row style={{ justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ fontWeight: "bold", fontSize: 18 }}>Edit Budget</Text>
+        <Text weight='700' style={{ fontSize: 18 }}>Edit Budget</Text>
         <ToggleButton onChange={(active) => setOptionsEnabled(active)} />
       </Row>
 
@@ -55,12 +57,12 @@ export default function EditBudgetForm({ budget, onEdit, onDelete }: EditBudgetF
             renderItem={({ item, index }) => (
               <FilterBadge
                 onPress={(value) => {
-                  const alreadySelected = (value == linkedAccount);
-                  setLinkedAccount(alreadySelected ? "" : value)
+                  const alreadySelected = (value == accountTitle);
+                  setAccountTitle(alreadySelected ? "" : value)
                 }}
                 activeColor={primary}
                 label={item.title}
-                active={linkedAccount === item.title} key={index} />
+                active={accountTitle === item.title} key={index} />
             )}
           />
 
