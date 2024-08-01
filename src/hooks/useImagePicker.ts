@@ -4,6 +4,7 @@ import { useState } from "react";
 export default function useImagePicker() {
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [imgUri, setImgUri] = useState(null);
+  const [imgBase64, setImgBase64] = useState("");
 
   const handlePermission = async () => {
     const response = await requestPermission();
@@ -18,11 +19,15 @@ export default function useImagePicker() {
       allowsEditing: true,
       aspect,
       quality: 0.5,
+      base64: true
     })
 
-    if (!result.canceled)
+    if (!result.canceled) {
+      console.log(result.assets[0])
       setImgUri(result.assets[0].uri);
+      setImgBase64(result.assets[0].base64);
+    }
   }
 
-  return { imgUri, pickImage };
+  return { imgUri, imgBase64, pickImage };
 }

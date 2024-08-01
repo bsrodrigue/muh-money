@@ -2,6 +2,7 @@ import { Icon, useTheme } from "@rneui/themed";
 import { TouchableOpacity, View } from "react-native";
 import { Avatar } from "@rneui/base";
 import { Text } from "../Text";
+import { useUserStore } from "../../stores";
 
 type HeaderProps = {
   searchMode?: boolean;
@@ -13,15 +14,17 @@ type HeaderProps = {
   loading?: boolean;
 };
 
-export default function Header({ onPressLogout }: HeaderProps) {
+export default function Header({ onPressSettings }: HeaderProps) {
   const { theme: { colors: { primary, grey1, black, white } } } = useTheme();
   const logoSize = 50;
+  const { user } = useUserStore();
 
   return (
     <View style={{ backgroundColor: black, alignItems: "center", flexDirection: "row", justifyContent: "center", padding: 15 }}>
       <View style={{ flexDirection: "row", alignItems: "center", flexGrow: 1 }}>
         <Avatar
           size={logoSize}
+          source={{ uri: user?.avatar }}
           containerStyle={{
             backgroundColor: primary,
             marginRight: 10
@@ -35,7 +38,7 @@ export default function Header({ onPressLogout }: HeaderProps) {
       </View>
       <TouchableOpacity
         onPress={() => {
-          onPressLogout?.();
+          onPressSettings?.();
         }}
         style={{ flexGrow: 1, alignItems: "flex-end" }}>
         <View style={{ padding: 7, backgroundColor: grey1, borderRadius: 50, aspectRatio: 1 }}>

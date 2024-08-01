@@ -5,7 +5,7 @@ import client from "../api/client";
 import { getJwtExpirationDate } from "../lib/jwt";
 import { useAsyncStorage } from "../lib/storage";
 import { Session } from "../types/auth";
-import { useAccountStore, useBudgetStore } from "../stores";
+import { useAccountStore, useBudgetStore, useUserStore } from "../stores";
 import { useTransactionStore } from "../stores/transaction.store";
 
 export default function useCachedResources() {
@@ -16,6 +16,7 @@ export default function useCachedResources() {
   const { init: initAccounts } = useAccountStore();
   const { init: initTransactions } = useTransactionStore();
   const { init: initBudgets } = useBudgetStore();
+  const { update } = useUserStore();
 
   const quicksandFontConfig = {
     "font-regular": require("../assets/fonts/Quicksand-Regular.ttf"),
@@ -30,9 +31,17 @@ export default function useCachedResources() {
     const budgets = await getData("budgets");
     const transactions = await getData("transactions");
 
+    const avatar = await getData("avatar");
+
+    update({ avatar });
+
     const data = [accounts, budgets, transactions];
 
-    return data.map((d) => JSON.parse(d));
+    return data.map((item) => {
+      const parsed = JSON.parse(item);
+
+      return parsed ?? [];
+    });
   }
 
   useEffect(() => {

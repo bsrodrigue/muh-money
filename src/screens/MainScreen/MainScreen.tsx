@@ -57,7 +57,10 @@ export default function MainScreen({ navigation }: MainScreenProps) {
             color: black,
           },
           header: () => (
-            <Header onPressLogout={() => setLogoutDialogIsVisible(true)} />
+            <Header
+              onPressLogout={() => setLogoutDialogIsVisible(true)}
+              onPressSettings={() => navigation.navigate("Settings")}
+            />
           )
         }}>
         <Tab.Screen
