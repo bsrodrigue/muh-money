@@ -1,28 +1,42 @@
+import * as FileSystem from 'expo-file-system';
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTheme } from "@rneui/themed";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { RootStackParamList } from "../../types";
-import { Text } from "../../components";
+import { Button, CardBottomSheet, ExpandingView, Text, TextInput } from "../../components";
 import { useImagePicker } from "../../hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUserStore } from "../../stores";
 import { useAsyncStorage } from "../../lib/storage";
+import { notify } from "../../lib";
+import { b64ToUri } from '../../lib/base64';
 
 type SettingsScreenProps = NativeStackScreenProps<RootStackParamList, 'Settings'>;
 
 export default function SettingsScreen({ navigation }: SettingsScreenProps) {
   const { theme: { colors: { error } } } = useTheme();
-  const { pickImage, imgUri } = useImagePicker();
-  const { update } = useUserStore();
+  const { pickImage, imgBase64 } = useImagePicker({ fileName: "avatar.jpg" });
+  const { user: { username }, update } = useUserStore();
   const { storeData } = useAsyncStorage();
+  const [fullname, setFullname] = useState(username);
+  const [userProfileEditorIsOpen, setUserProfileEditorIsOpen] = useState(false);
+
+
+  const onChangeFullname = () => {
+    update({ username: fullname });
+    setUserProfileEditorIsOpen(false);
+    storeData('username', fullname);
+    notify.success("Username updated");
+  }
 
   useEffect(() => {
-    if (imgUri) {
-      update({ avatar: imgUri });
-      storeData('avatar', imgUri);
+    const uri = b64ToUri('png', imgBase64);
+    if (imgBase64) {
+      update({ avatar: uri });
+      storeData('avatar', uri);
     }
 
-  }, [imgUri]);
+  }, [imgBase64]);
 
   const settings = [
     {
@@ -37,7 +51,9 @@ export default function SettingsScreen({ navigation }: SettingsScreenProps) {
           },
           {
             title: "Change your username",
-            onPress: () => { }
+            onPress: () => {
+              setUserProfileEditorIsOpen(true);
+            }
           },
           {
             title: "Export data",
@@ -75,6 +91,19 @@ export default function SettingsScreen({ navigation }: SettingsScreenProps) {
             </View>
           </View>
         )} />
+      <CardBottomSheet
+        isVisible={userProfileEditorIsOpen}
+        onBackdropPress={() => setUserProfileEditorIsOpen(false)}>
+        <ExpandingView style={{ paddingHorizontal: 10, paddingVertical: 5 }}>
+          <TextInput
+            label="Username"
+            placeholder="Enter your username"
+            defaultValue={fullname}
+            onChangeText={setFullname} />
+          <View style={{ height: 10 }} />
+          <Button onPress={onChangeFullname}>Submit</Button>
+        </ExpandingView>
+      </CardBottomSheet>
     </View>
   )
 }

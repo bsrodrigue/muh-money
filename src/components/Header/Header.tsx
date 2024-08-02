@@ -33,7 +33,7 @@ export default function Header({ onPressSettings }: HeaderProps) {
         />
         <View >
           <Text style={{ color: white, fontSize: 12, opacity: 0.5 }}  >Welcome back</Text>
-          <Text weight="700" style={{ color: white, fontSize: 25 }}>Bazie Maimouna</Text>
+          <Text weight="700" style={{ color: white, fontSize: 25 }}>{user.username || "Application User"}</Text>
         </View>
       </View>
       <TouchableOpacity

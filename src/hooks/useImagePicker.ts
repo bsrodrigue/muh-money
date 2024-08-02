@@ -1,9 +1,14 @@
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
+import FS from "../lib/fs";
 
-export default function useImagePicker() {
+interface ImagePickerProps {
+  fileName?: string;
+}
+
+export default function useImagePicker({ fileName }: ImagePickerProps) {
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
-  const [imgUri, setImgUri] = useState(null);
+  const [imgUri, setImgUri] = useState("");
   const [imgBase64, setImgBase64] = useState("");
 
   const handlePermission = async () => {
@@ -22,11 +27,14 @@ export default function useImagePicker() {
       base64: true
     })
 
-    if (!result.canceled) {
-      console.log(result.assets[0])
-      setImgUri(result.assets[0].uri);
-      setImgBase64(result.assets[0].base64);
-    }
+    if (result.canceled) return;
+
+    const b64 = result.assets[0].base64;
+    const uri =
+      (fileName) ? await FS.saveFile(fileName, b64) : result.assets[0].uri;
+
+    setImgUri(uri);
+    setImgBase64(b64);
   }
 
   return { imgUri, imgBase64, pickImage };

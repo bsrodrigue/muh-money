@@ -31,9 +31,10 @@ export default function useCachedResources() {
     const budgets = await getData("budgets");
     const transactions = await getData("transactions");
 
-    const avatar = await getData("avatar");
+    const avatar = JSON.parse(await getData("avatar"));
+    const username = JSON.parse(await getData("username"));
 
-    update({ avatar });
+    update({ avatar, username });
 
     const data = [accounts, budgets, transactions];
 
