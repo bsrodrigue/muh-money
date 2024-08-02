@@ -32,7 +32,15 @@ export function useAsyncStorage() {
     }
   }
 
+  const clearData = async () => {
+    try {
+      await AsyncStorage.clear()
+    } catch (error) {
+      handleAsyncStorageError(error);
+    }
+  }
+
   return {
-    storeData, getData, removeData
+    storeData, getData, removeData, clearData
   }
 }

@@ -21,15 +21,14 @@ interface EditBudgetFormProps {
 export default function EditBudgetForm({ budget, onEdit, onDelete }: EditBudgetFormProps) {
   const { theme: { colors: { primary, error, black } } } = useTheme();
   const [optionsEnabled, setOptionsEnabled] = useState(false);
-  const [accountTitle, setAccountTitle] = useState(budget.linkedAccount);
+  const [accountUUID, setAccountUUID] = useState(budget.linkedAccount);
   const [dateLimit, setDateLimit] = useState<Date>(null);
   const [title, setTitle] = useState(budget.title);
   const [limit, setLimit] = useState(budget.balance.toString());
   const { items: accounts } = useAccountStore();
 
   const onSubmit = () => {
-    const account = accounts.find((account) => account.title === accountTitle);
-    const data: Budget = Object.assign(budget, { title, balance: parseFloat(limit), linkedAccount: account.uuid, dateLimit });
+    const data: Budget = Object.assign(budget, { title, balance: parseFloat(limit), linkedAccount: accountUUID, dateLimit });
     onEdit(data);
   };
 
@@ -57,12 +56,11 @@ export default function EditBudgetForm({ budget, onEdit, onDelete }: EditBudgetF
             renderItem={({ item, index }) => (
               <FilterBadge
                 onPress={(value) => {
-                  const alreadySelected = (value == accountTitle);
-                  setAccountTitle(alreadySelected ? "" : value)
+                  setAccountUUID(value)
                 }}
                 activeColor={primary}
                 label={item.title}
-                active={accountTitle === item.title} key={index} />
+                active={accountUUID === item.uuid} key={index} />
             )}
           />
 

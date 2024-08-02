@@ -45,14 +45,14 @@ export default function TotalBalanceCard({ }: TotalBalanceCardProps) {
       justifyContent: "space-between"
     }}>
       <View>
-        <Text style={{ color: white, opacity: 0.5 }}>Total Balance</Text>
+        <Text weight='500' style={{ color: white, opacity: 0.5 }}>Total Balance</Text>
         <Text weight='700' style={{ color: white, fontSize: 25 }}>{`${total.toLocaleString()} ${baseCurrency}`}</Text>
       </View>
 
       <Spacing vertical size={10} />
 
       <View>
-        <Text style={{ color: white, marginBottom: 5, opacity: 0.5 }}>Activities</Text>
+        <Text weight='700' style={{ color: white, marginBottom: 5, }}>Activities</Text>
         <View style={{ flexDirection: "row", gap: 20 }}>
           <SubCard label='Incomes' balanceString={`${incomes.toLocaleString()} ${baseCurrency}`} color={success} />
           <SubCard label='Expenses' balanceString={`${expenses.toLocaleString()} ${baseCurrency}`} color={error} />
@@ -74,9 +74,9 @@ function SubCard({ label, balanceString, color }: SubCardProps) {
     <View style={[{ backgroundColor: white, padding: 10, flexGrow: 1, borderRadius: 5 }, shadowStyle]}>
       <Row style={{ alignItems: "center", gap: 5 }}>
         <ColorDot color={color} />
-        <Text weight='700' style={{ fontSize: 12 }}>{label}</Text>
+        <Text weight='700' style={{ fontSize: 12, opacity: 0.8 }}>{label}</Text>
       </Row>
-      <Text>
+      <Text weight='500'>
         {balanceString}
       </Text>
     </View>

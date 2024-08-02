@@ -25,7 +25,7 @@ export default function FilterBadge({ label, active, activeColor, onPress }: Fil
         weight='700'
         style={{
           color: (active) ? white : black,
-          opacity: (active) ? 1 : 0.5
+          opacity: (active) ? 1 : 0.5,
         }}>{label}</Text>
     </TouchableOpacity>
   );

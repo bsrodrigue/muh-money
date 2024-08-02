@@ -33,12 +33,11 @@ export default function CreateBudgetForm({ onCreate }: CreateBudgetFormProps) {
   const onSubmit = () => {
     const uuid = Crypto.generateRandomUUID();
     const account = items.find((item) => item.title === accountTitle);
-
     const data: Budget = {
       uuid,
       title, linkedAccount: account.uuid,
-      limitDate: limitDate.toISOString(),
-      balance: parseInt(limit)
+      limitDate: limitDate?.toISOString() ?? "",
+      balance: parseInt(limit),
     }
 
     onCreate(data);
@@ -50,10 +49,8 @@ export default function CreateBudgetForm({ onCreate }: CreateBudgetFormProps) {
         <Text weight='700' style={{ fontSize: 18 }}>Create Budget</Text>
         <ToggleButton onChange={(active) => setOptionsEnabled(active)} />
       </Row>
-
       <TextInput label={`Budget name`} onChangeText={setTitle} />
       <TextInput label={`Budget Limit`} keyboardType='numeric' onChangeText={setLimit} />
-
       {
         optionsEnabled && (
           <View>
@@ -62,7 +59,6 @@ export default function CreateBudgetForm({ onCreate }: CreateBudgetFormProps) {
           </View>
         )
       }
-
       {
         (hasAccounts) && (
           <>
@@ -97,7 +93,6 @@ export default function CreateBudgetForm({ onCreate }: CreateBudgetFormProps) {
           </View>
         )
       }
-
       <Button disabled={!isValid || !hasAccounts} title="Submit" onPress={onSubmit} />
     </ExpandingView>
   );

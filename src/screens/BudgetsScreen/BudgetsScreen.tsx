@@ -4,9 +4,8 @@ import { BudgetCard, CardBottomSheet, CreateBudgetForm, EditBudgetForm, Expandin
 import { FAB } from "@rneui/base";
 import { View, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import { useTheme } from "@rneui/themed";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useBudgetStore } from "../../stores";
-import { useAsyncStorage } from "../../lib/storage";
 
 type BudgetsScreenProps = NativeStackScreenProps<RootStackParamList, 'Budgets'>;
 
@@ -17,11 +16,6 @@ export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps)
   const [editingBudget, setEditingBudget] = useState(null);
 
   const { items, create, update, remove } = useBudgetStore();
-  const { storeData } = useAsyncStorage();
-
-  useEffect(() => {
-    storeData('budgets', items);
-  }, [items]);
 
   return (
     <ExpandingView>

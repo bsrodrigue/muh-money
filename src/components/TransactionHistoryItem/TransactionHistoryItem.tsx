@@ -1,17 +1,21 @@
 import { Icon, useTheme } from '@rneui/themed';
-import { View, Text } from 'react-native';
-import { TransactionType } from '../../types/models';
+import { View } from 'react-native';
+import { Transaction } from '../../types/models';
 import { baseCurrency, transactionTypeColors, transactionTypeSign } from '../../config';
+import { useBudgetStore } from '../../stores';
+import { mom } from '../../lib/moment';
+import { Text } from '../Text';
+import { Row } from '../Row';
 
 interface TransactionHistoryItemProps {
-  category?: string;
-  title?: string;
-  type?: TransactionType;
-  amount?: number;
+  transaction: Transaction;
 }
 
-export default function TransactionHistoryItem({ title, category, type, amount }: TransactionHistoryItemProps) {
+export default function TransactionHistoryItem({ transaction: { title, type, amount, budgetId, createdAt } }: TransactionHistoryItemProps) {
   const { theme: { colors: { greyOutline, grey5 } } } = useTheme();
+  const { items } = useBudgetStore()
+
+  const budget = items.find((item) => item.uuid === budgetId);
 
   const maxChars = 30;
 
@@ -35,12 +39,18 @@ export default function TransactionHistoryItem({ title, category, type, amount }
             <Icon style={{ opacity: 0.5 }} name="money" />
           </View>
           <View>
-            <Text style={{ fontWeight: "bold", fontSize: 10, opacity: 0.5 }}>{category ?? "Transaction"}</Text>
+            <Text style={{ fontWeight: "bold", fontSize: 10, opacity: 0.5 }}>{budget.title}</Text>
             <Text style={{ fontWeight: "bold", fontSize: 12 }}>{title.length >= maxChars ? `${title.slice(0, maxChars)}...` : title}</Text>
           </View>
         </View>
 
-        <Text style={{ color: transactionTypeColors[type] }}>{`${transactionTypeSign[type]}${amount} ${baseCurrency}`}</Text>
+        <View style={{ alignItems: "flex-end" }}>
+          <Row style={{ alignItems: "center", gap: 5 }}>
+            <Text weight="500" style={{ fontSize: 10, opacity: 0.5 }}>{mom(createdAt).format("DD/MM/YY")}</Text>
+            <Icon size={10} name="clock" type="feather" />
+          </Row>
+          <Text weight='700' style={{ color: transactionTypeColors[type] }}>{`${transactionTypeSign[type]}${amount} ${baseCurrency}`}</Text>
+        </View>
       </View>
     </View>
   );

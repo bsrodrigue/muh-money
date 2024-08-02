@@ -1,4 +1,3 @@
-import * as FileSystem from 'expo-file-system';
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTheme } from "@rneui/themed";
 import { FlatList, TouchableOpacity, View } from "react-native";
@@ -6,7 +5,7 @@ import { RootStackParamList } from "../../types";
 import { Button, CardBottomSheet, ExpandingView, Text, TextInput } from "../../components";
 import { useImagePicker } from "../../hooks";
 import { useEffect, useState } from "react";
-import { useUserStore } from "../../stores";
+import { useAccountStore, useBudgetStore, useTransactionStore, useUserStore } from "../../stores";
 import { useAsyncStorage } from "../../lib/storage";
 import { notify } from "../../lib";
 import { b64ToUri } from '../../lib/base64';
@@ -16,10 +15,15 @@ type SettingsScreenProps = NativeStackScreenProps<RootStackParamList, 'Settings'
 export default function SettingsScreen({ navigation }: SettingsScreenProps) {
   const { theme: { colors: { error } } } = useTheme();
   const { pickImage, imgBase64 } = useImagePicker({ fileName: "avatar.jpg" });
-  const { user: { username }, update } = useUserStore();
-  const { storeData } = useAsyncStorage();
+  const { user: { username }, update, clear: clearUser } = useUserStore();
+  const { storeData, clearData } = useAsyncStorage();
   const [fullname, setFullname] = useState(username);
   const [userProfileEditorIsOpen, setUserProfileEditorIsOpen] = useState(false);
+
+  const { clear: clearAccounts } = useAccountStore();
+  const { clear: clearTransactions } = useTransactionStore();
+  const { clear: clearBudgets } = useBudgetStore();
+
 
 
   const onChangeFullname = () => {
@@ -67,6 +71,13 @@ export default function SettingsScreen({ navigation }: SettingsScreenProps) {
             title: "Clear data",
             danger: true,
             onPress: () => {
+
+              clearUser();
+              clearAccounts();
+              clearTransactions();
+              clearBudgets();
+
+              clearData();
             }
           },
         ]

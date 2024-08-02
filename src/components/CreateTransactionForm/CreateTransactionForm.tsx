@@ -50,7 +50,7 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
       amount: parseFloat(amount),
       type: transactionType,
       accountId: budget.linkedAccount,
-      budgetId: budget.uuid
+      budgetId: budget.uuid,
     }
 
     onCreate(data);

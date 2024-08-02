@@ -40,7 +40,7 @@ export default function BudgetCard({ budget }: BudgetCardProps) {
         alignItems: "center",
       }}>
         <View>
-          <Text weight='300' style={{ fontSize: 20 }}>{truncatedTitle}</Text>
+          <Text weight='500' style={{ fontSize: 20 }}>{truncatedTitle}</Text>
         </View>
 
         <Text weight='700' style={{ fontSize: 16, color }}>{width}</Text>

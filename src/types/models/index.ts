@@ -20,6 +20,8 @@ export interface Transaction {
   accountId?: string;
   date?: string;
   time?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Budget {
@@ -28,6 +30,8 @@ export interface Budget {
   balance?: number;
   limitDate?: string;
   linkedAccount: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Account {
@@ -35,6 +39,8 @@ export interface Account {
   type: AccountType;
   title: string;
   balance?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ResultPagination {

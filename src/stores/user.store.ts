@@ -7,8 +7,8 @@ interface UserProfile {
 
 interface UserState {
   user: UserProfile;
-
   update: (user: Partial<UserProfile>) => void;
+  clear: () => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -17,6 +17,7 @@ export const useUserStore = create<UserState>((set) => ({
     set(state => ({
       user: { ...state.user, ...user }
     }));
-  }
+  },
+  clear: () => set({ user: { avatar: "", username: "" } }),
 }));
 

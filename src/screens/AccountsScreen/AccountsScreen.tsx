@@ -4,9 +4,8 @@ import { FAB } from "@rneui/base";
 import { AccountCard, CardBottomSheet, CreateAccountForm, EditAccountForm, ExpandingView, ScreenDivider } from "../../components"
 import { View, FlatList, Dimensions, TouchableOpacity } from "react-native";
 import { useTheme } from "@rneui/themed";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAccountStore } from "../../stores";
-import { useAsyncStorage } from "../../lib/storage";
 
 type AccountsScreenProps = NativeStackScreenProps<RootStackParamList, 'Accounts'>;
 
@@ -16,11 +15,6 @@ export default function AccountsScreen({ navigation }: AccountsScreenProps) {
   const [editingAccount, setEditingAccount] = useState(null);
   const { height } = Dimensions.get("window");
   const { items, create, update, remove } = useAccountStore();
-  const { storeData } = useAsyncStorage();
-
-  useEffect(() => {
-    storeData('accounts', items);
-  }, [items]);
 
   return (
     <ExpandingView>
