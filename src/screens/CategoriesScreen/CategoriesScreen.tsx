@@ -1,63 +1,45 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
-import { CardBottomSheet, CreateCategoryForm, CreateTransactionForm, EditTransactionForm, ExpandingView } from "../../components"
-import { FAB, Icon } from "@rneui/base";
+import { CardBottomSheet, CreateCategoryForm, EditTransactionForm, ExpandingView, Row } from "../../components"
+import { FAB } from "@rneui/base";
 import { useState } from "react";
-import { useTheme } from "@rneui/themed";
-
-import iconData from "../../constants/icon_data.json";
-import { Dimensions, Text } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { View } from "react-native";
-
-const familiesMapping = {
-  "AntDesign": "antdesign",
-  "Entypo": "entypo",
-  "EvilIcons": "evilicon",
-  "Feather": "feather",
-  "FontAwesome": "font-awesome",
-  "FontAwesome5": "font-awesome-5",
-  "Fontisto": "fontisto",
-  "Foundation": "foundation",
-  "Ionicons": "ionicon",
-  "MaterialIcons": "material",
-  "MaterialCommunityIcons": "material-community",
-  "Octicons": "octicon",
-  "SimpleLineIcons": "simple-line-icon",
-  "Zocial": "zocial"
-};
-
-const iconFamilies = Object.keys(iconData).filter((item) => familiesMapping[item] !== undefined);
+import { Icon, useTheme } from "@rneui/themed";
+import { useCategoryStore } from "../../stores";
+import { FlatList, View } from "react-native";
+import { Text } from "../../components";
 
 type CategoriesScreenProps = NativeStackScreenProps<RootStackParamList, 'Categories'>;
 
 export default function CategoriesScreen({ navigation, route }: CategoriesScreenProps) {
-  const { theme: { colors: { white, black, primary } } } = useTheme();
+  const { theme: { colors: { white, black, primary, greyOutline } } } = useTheme();
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false)
   const [editingCategory, setEditingCategory] = useState(null)
-  const height = Dimensions.get('window').height
-
-  const family = iconFamilies[0];
+  const { create, items } = useCategoryStore();
 
   return (
     <ExpandingView>
-      {
-        <View style={{
-          height: (height * 0.8)
-        }}>
-          <Text>{family}</Text>
-          <FlashList
-            getItemType={(item) => typeof (item)}
-            bounces
-            numColumns={3}
-            data={iconData[family]}
-            estimatedItemSize={10000}
-            renderItem={({ item }) =>
-            (<View>
-              <Icon name={item as string} type={familiesMapping[iconFamilies[0]]} />
-            </View>)} />
-        </View>
-      }
+
+      <FlatList
+        numColumns={3}
+        contentContainerStyle={{
+          paddingHorizontal: 10,
+        }}
+        columnWrapperStyle={{
+          justifyContent: "flex-start",
+        }}
+        data={items} renderItem={({ item }) => (
+          <View style={{ paddingHorizontal: 10, paddingVertical: 20 }}>
+            <View style={{ alignItems: "center", gap: 10 }}>
+              <View style={{ aspectRatio: 1, borderRadius: 50, borderColor: greyOutline, borderWidth: 1, padding: 10 }}>
+                <Icon name={item.iconName} type={item.iconFamily} color={item.color} />
+              </View>
+
+              <Text weight="700">{item.title}</Text>
+            </View>
+          </View>
+        )} />
+
+
       <FAB
         onPress={() => setCreateFormIsVisible(true)}
         title="Create Category" size="small"
@@ -65,11 +47,13 @@ export default function CategoriesScreen({ navigation, route }: CategoriesScreen
         titleStyle={{ fontSize: 12 }} />
 
       <CardBottomSheet isVisible={createFormIsVisible} onBackdropPress={() => setCreateFormIsVisible(false)}>
-        <CreateCategoryForm />
+        <CreateCategoryForm onCreate={(category) => {
+          create(category)
+          setCreateFormIsVisible(false);
+        }} />
       </CardBottomSheet>
 
       <CardBottomSheet isVisible={Boolean(editingCategory)} onBackdropPress={() => setEditingCategory(null)}>
-        <EditTransactionForm transaction={editingCategory} />
       </CardBottomSheet>
 
     </ExpandingView>

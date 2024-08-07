@@ -19,7 +19,7 @@ const TextInput = forwardRef(({ onChange, wrapperStyle, label, inputStyle, error
     <View style={wrapperStyle}>
       {
         label && (
-          <Text weight="700">{label}</Text>
+          <Text weight="600">{label}</Text>
         )
       }
       <Input

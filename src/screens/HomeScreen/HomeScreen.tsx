@@ -17,6 +17,7 @@ const timeFilters = [
   "Monthly",
 ];
 
+
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   const { theme: { colors: { white, black, primary } } } = useTheme();
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);

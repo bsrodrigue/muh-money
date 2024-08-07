@@ -41,7 +41,7 @@ export default function TotalBalanceCard({ }: TotalBalanceCardProps) {
     <View style={{
       backgroundColor: primary,
       padding: 20,
-      borderRadius: 10,
+      borderRadius: 20,
       justifyContent: "space-between"
     }}>
       <View>

@@ -7,11 +7,11 @@ import { FilterBadge } from '../FilterBadge';
 import { TextInput } from '../Input';
 import { Icon } from '@rneui/base';
 import { Button } from '../Button';
-import { Transaction, TransactionType } from '../../types/models';
+import { Transaction, TransactionCategory, TransactionType } from '../../types/models';
 import { transactionTypeColors } from '../../config';
 import { DateTimePicker } from '../DateTimePicker';
 import { Selector } from '../Selector';
-import { useBudgetStore } from '../../stores';
+import { useBudgetStore, useCategoryStore } from '../../stores';
 import Crypto from '../../lib/crypto';
 import { Text } from '../Text';
 
@@ -26,14 +26,16 @@ interface CreateTransactionFormProps {
 }
 
 export default function CreateTransactionForm({ onCreate }: CreateTransactionFormProps) {
-  const { theme: { colors: { primary, error } } } = useTheme();
+  const { theme: { colors: { primary, error, greyOutline } } } = useTheme();
   const [transactionType, setTransactionType] = useState<TransactionType>("Expense");
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("0");
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
   const [budgetId, setBudgetId] = useState("");
+  const [categoryId, setCategoryId] = useState("");
 
+  const { items: categories } = useCategoryStore();
   const { items: budgets } = useBudgetStore();
 
   const hasBudgets = budgets.length !== 0;
@@ -51,6 +53,7 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
       type: transactionType,
       accountId: budget.linkedAccount,
       budgetId: budget.uuid,
+      categoryId,
     }
 
     onCreate(data);
@@ -74,6 +77,28 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
       <TextInput label={`${transactionType} name`} onChangeText={setTitle} />
 
       <TextInput wrapperStyle={{ flexGrow: 1 }} label="Amount" keyboardType="numeric" onChangeText={setAmount} />
+
+      {
+        categories.length != 0 && (
+          <Selector
+            label="Category"
+            defaultValue={categories[0].title}
+            options={categories.map((category) => category.title)}
+            onChange={(index) => setCategoryId(categories[index].uuid)}
+            OptionComponent={(optionTitle) => {
+              const option = categories.find((item) => item.title === optionTitle) as TransactionCategory;
+              return (
+                <Row style={{ alignItems: "center", gap: 10 }}>
+                  <View style={{ aspectRatio: 1, borderRadius: 50, borderColor: greyOutline, borderWidth: 1, padding: 5 }}>
+                    <Icon size={14} name={option.iconName} type={option.iconFamily} color={option.color} />
+                  </View>
+                  <Text weight='700'>{option.title}</Text>
+                </Row>
+              )
+            }}
+          />
+        )
+      }
 
       <Row>
         {hasBudgets &&

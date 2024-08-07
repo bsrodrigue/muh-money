@@ -5,8 +5,16 @@ import client from "../api/client";
 import { getJwtExpirationDate } from "../lib/jwt";
 import { useAsyncStorage } from "../lib/storage";
 import { Session } from "../types/auth";
-import { useAccountStore, useBudgetStore, useUserStore } from "../stores";
+import { useAccountStore, useBudgetStore, useCategoryStore, useUserStore } from "../stores";
 import { useTransactionStore } from "../stores/transaction.store";
+
+const quicksandFontConfig = {
+  "font-regular": require("../assets/fonts/Quicksand-Regular.ttf"),
+  "font-300": require("../assets/fonts/Quicksand-Light.ttf"),
+  "font-500": require("../assets/fonts/Quicksand-Medium.ttf"),
+  "font-600": require("../assets/fonts/Quicksand-SemiBold.ttf"),
+  "font-700": require("../assets/fonts/Quicksand-Bold.ttf"),
+};
 
 export default function useCachedResources() {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -16,32 +24,21 @@ export default function useCachedResources() {
   const { init: initAccounts } = useAccountStore();
   const { init: initTransactions } = useTransactionStore();
   const { init: initBudgets } = useBudgetStore();
+  const { init: initCategories } = useCategoryStore();
   const { update } = useUserStore();
 
-  const quicksandFontConfig = {
-    "font-regular": require("../assets/fonts/Quicksand-Regular.ttf"),
-    "font-300": require("../assets/fonts/Quicksand-Light.ttf"),
-    "font-500": require("../assets/fonts/Quicksand-Medium.ttf"),
-    "font-600": require("../assets/fonts/Quicksand-SemiBold.ttf"),
-    "font-700": require("../assets/fonts/Quicksand-Bold.ttf"),
-  };
-
   async function loadData() {
-    const accounts = await getData("accounts");
-    const budgets = await getData("budgets");
-    const transactions = await getData("transactions");
+    const stores = ["accounts", "budgets", "transactions", "categories"];
+    const initializers = [initAccounts, initBudgets, initTransactions, initCategories];
 
     const avatar = JSON.parse(await getData("avatar"));
     const username = JSON.parse(await getData("username"));
 
     update({ avatar, username });
 
-    const data = [accounts, budgets, transactions];
-
-    return data.map((item) => {
-      const parsed = JSON.parse(item);
-
-      return parsed ?? [];
+    stores.forEach(async (store, index) => {
+      const parsed = JSON.parse(await getData(store)) ?? [];
+      initializers[index](parsed);
     });
   }
 
@@ -55,12 +52,7 @@ export default function useCachedResources() {
           ...quicksandFontConfig,
         });
 
-        const [accounts, budgets, transactions] = await loadData();
-
-        initAccounts(accounts);
-        initBudgets(budgets);
-        initTransactions(transactions);
-
+        await loadData();
         const jsonSession = await getData("session");
         const session = JSON.parse(jsonSession) as Session;
 

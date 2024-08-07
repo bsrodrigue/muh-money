@@ -8,9 +8,13 @@ const Stack = createNativeStackNavigator();
 
 function PublicStack() {
   return (
-    <Stack.Navigator initialRouteName={
-      "Main"
-    } screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      initialRouteName={
+        "Main"
+      } screenOptions={{
+        headerShown: false,
+        animation: "slide_from_right"
+      }}>
       <Stack.Screen name='Main' component={MainScreen} />
       <Stack.Screen name='Settings' component={SettingsScreen} options={{ headerShown: true, headerTitle: "Paramètres" }} />
     </Stack.Navigator>

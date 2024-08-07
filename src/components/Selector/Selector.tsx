@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import Animated, { useSharedValue } from 'react-native-reanimated';
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, ViewStyle } from 'react-native'
 import { Row } from '../Row';
 import { Icon } from '@rneui/base';
 import { useTheme } from '@rneui/themed';
@@ -10,9 +10,11 @@ interface SelectorProps {
   options: string[];
   defaultValue?: string;
   onChange?: (index: number) => void;
+  containerStyle?: ViewStyle;
+  OptionComponent?: (option: string) => ReactNode;
 }
 
-export default function Selector({ label, defaultValue, onChange, options }: SelectorProps) {
+export default function Selector({ label, defaultValue, onChange, options, containerStyle, OptionComponent }: SelectorProps) {
   const { theme: { colors: { primary } } } = useTheme();
   const defaultIndex = options.indexOf(defaultValue) ?? 0;
   const [index, setIndex] = useState(defaultIndex);
@@ -33,7 +35,7 @@ export default function Selector({ label, defaultValue, onChange, options }: Sel
   }, [index]);
 
   return (
-    <View style={{ flexGrow: 1, justifyContent: "space-between" }}>
+    <View style={[{ flexGrow: 1, justifyContent: "space-between" }, containerStyle]}>
       <Text style={{
         fontWeight: "bold",
       }}>{label}</Text>
@@ -41,14 +43,21 @@ export default function Selector({ label, defaultValue, onChange, options }: Sel
         <TouchableOpacity onPress={handlePrevious}>
           <Icon name="arrow-left" color={primary} size={35} />
         </TouchableOpacity>
-        <Animated.Text
-          style={{
-            fontWeight: "bold",
-            fontSize,
-            color: primary
-          }}>
-          {options[index]}
-        </Animated.Text>
+        {
+          OptionComponent && (OptionComponent(options[index]))
+        }
+        {
+          !OptionComponent && (
+            <Animated.Text
+              style={{
+                fontWeight: "bold",
+                fontSize,
+                color: primary
+              }}>
+              {options[index]}
+            </Animated.Text>
+          )
+        }
         <TouchableOpacity onPress={handleNext}>
           <Icon name="arrow-right" color={primary} size={35} />
         </TouchableOpacity>

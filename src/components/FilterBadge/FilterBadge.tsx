@@ -18,14 +18,17 @@ export default function FilterBadge({ label, active, activeColor, onPress }: Fil
       style={{
         borderRadius: 25,
         backgroundColor: (active) ? (activeColor ?? primary) : greyOutline,
-        paddingVertical: 5,
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        justifyContent: "center",
+        alignItems: "center",
       }}>
       <Text
         weight='700'
         style={{
           color: (active) ? white : black,
           opacity: (active) ? 1 : 0.5,
+          lineHeight: 16,
+          paddingVertical: 5
         }}>{label}</Text>
     </TouchableOpacity>
   );

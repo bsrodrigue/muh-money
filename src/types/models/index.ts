@@ -10,10 +10,18 @@ export interface ID {
 export type TransactionType = "Expense" | "Income" | "Transfer";
 export type AccountType = "Cash" | "Bank" | "Mobile Money";
 
+export interface TransactionCategory {
+  uuid?: string;
+  title: string;
+  iconName: string;
+  iconFamily: string;
+  color?: string;
+}
+
 export interface Transaction {
   uuid?: string;
   title: string;
-  category?: string;
+  categoryId?: string;
   type: TransactionType;
   amount: number;
   budgetId?: string;

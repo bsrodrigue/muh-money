@@ -5,7 +5,7 @@ import { RootStackParamList } from "../../types";
 import { Button, CardBottomSheet, ExpandingView, Text, TextInput } from "../../components";
 import { useImagePicker } from "../../hooks";
 import { useEffect, useState } from "react";
-import { useAccountStore, useBudgetStore, useTransactionStore, useUserStore } from "../../stores";
+import { useAccountStore, useBudgetStore, useCategoryStore, useTransactionStore, useUserStore } from "../../stores";
 import { useAsyncStorage } from "../../lib/storage";
 import { notify } from "../../lib";
 import { b64ToUri } from '../../lib/base64';
@@ -23,8 +23,7 @@ export default function SettingsScreen({ navigation }: SettingsScreenProps) {
   const { clear: clearAccounts } = useAccountStore();
   const { clear: clearTransactions } = useTransactionStore();
   const { clear: clearBudgets } = useBudgetStore();
-
-
+  const { clear: clearCategories } = useCategoryStore();
 
   const onChangeFullname = () => {
     update({ username: fullname });
@@ -71,11 +70,11 @@ export default function SettingsScreen({ navigation }: SettingsScreenProps) {
             title: "Clear data",
             danger: true,
             onPress: () => {
-
               clearUser();
               clearAccounts();
               clearTransactions();
               clearBudgets();
+              clearCategories();
 
               clearData();
             }

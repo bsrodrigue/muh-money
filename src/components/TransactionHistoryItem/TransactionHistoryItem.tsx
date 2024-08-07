@@ -2,7 +2,7 @@ import { Icon, useTheme } from '@rneui/themed';
 import { View } from 'react-native';
 import { Transaction } from '../../types/models';
 import { baseCurrency, transactionTypeColors, transactionTypeSign } from '../../config';
-import { useBudgetStore } from '../../stores';
+import { useBudgetStore, useCategoryStore } from '../../stores';
 import { mom } from '../../lib/moment';
 import { Text } from '../Text';
 import { Row } from '../Row';
@@ -11,9 +11,13 @@ interface TransactionHistoryItemProps {
   transaction: Transaction;
 }
 
-export default function TransactionHistoryItem({ transaction: { title, type, amount, budgetId, createdAt } }: TransactionHistoryItemProps) {
+export default function TransactionHistoryItem({ transaction: { title, type, amount, budgetId, categoryId, createdAt } }: TransactionHistoryItemProps) {
   const { theme: { colors: { greyOutline, grey5 } } } = useTheme();
   const { items } = useBudgetStore()
+  const { items: categories } = useCategoryStore()
+
+  //TODO: Fix this, it is terrible for performance.
+  const category = categories.find((item) => item.uuid === categoryId);
 
   const budget = items.find((item) => item.uuid === budgetId);
 
@@ -32,11 +36,22 @@ export default function TransactionHistoryItem({ transaction: { title, type, amo
           <View style={{
             aspectRatio: 1,
             borderRadius: 50,
-            backgroundColor: grey5,
             padding: 5,
-            marginRight: 5
+            marginRight: 5,
+            borderColor: greyOutline,
+            borderWidth: 1,
           }}>
-            <Icon style={{ opacity: 0.5 }} name="money" />
+            {
+              category && (
+                <Icon size={16} color={category.color} style={{}} name={category.iconName} type={category.iconFamily} />
+              )
+            }
+            {
+              !category && (
+
+                <Icon style={{ opacity: 0.5 }} name="money" />
+              )
+            }
           </View>
           <View>
             <Text style={{ fontWeight: "bold", fontSize: 10, opacity: 0.5 }}>{budget.title}</Text>
