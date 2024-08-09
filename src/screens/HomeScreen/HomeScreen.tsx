@@ -1,13 +1,14 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
 import React, { useState } from "react";
-import { CardBottomSheet, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, ScreenDivider, TotalBalanceCard, TransactionHistoryItem } from "../../components";
+import { CardBottomSheet, CenteringView, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, ScreenDivider, TotalBalanceCard, TransactionHistoryItem } from "../../components";
 import { View, FlatList, TouchableOpacity, Dimensions } from "react-native";
-import { useTheme } from "@rneui/themed";
+import { Icon, useTheme } from "@rneui/themed";
 import { FAB } from "@rneui/base";
 import { useTransactionStore } from "../../stores/transaction.store";
 import { Text } from "../../components";
 import { mom } from "../../lib/moment";
+import { setDayToStart, setMonthToStart, setWeekToStart } from "../../lib/datetime";
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -17,15 +18,30 @@ const timeFilters = [
   "Monthly",
 ];
 
+const timeFilterHandlers = {
+  "Daily": setDayToStart,
+  "Weekly": setWeekToStart,
+  "Monthly": setMonthToStart,
+}
+
+const timeFilterStrs = {
+  "Daily": "Today",
+  "Weekly": "This Week",
+  "Monthly": "This Month",
+}
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   const { theme: { colors: { white, black, primary } } } = useTheme();
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
-  const [timeFilter, setTimeFilter] = useState(0);
+  const [timeFilterIndex, setTimeFilter] = useState(0);
   const { height } = Dimensions.get("window");
 
   const { items: transactions, create, update, remove } = useTransactionStore();
+
+  const timeFilter = timeFilterHandlers[timeFilters[timeFilterIndex]](new Date());
+  const timeFilterStr = timeFilterStrs[timeFilters[timeFilterIndex]];
+  const filtertedTransactions = transactions.filter((t) => new Date(t.createdAt) >= timeFilter)
 
   return (
     <ExpandingView style={{ backgroundColor: white }}>
@@ -49,7 +65,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
             {timeFilters.map((filter, index) => (
               <FilterBadge
                 label={filter}
-                active={index === timeFilter}
+                active={index === timeFilterIndex}
                 onPress={() => setTimeFilter(index)}
                 key={index} />
             ))}
@@ -58,18 +74,28 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       </View>
 
       <View style={{ paddingHorizontal: 20 }}>
-        <View>
-          <Text weight="700" style={{ marginBottom: 10, fontSize: 12 }}>{`${mom(new Date()).format("dddd - DD/MM/YY")}`}</Text>
+        <View
+          style={{
+            height: (height * 0.35),
+          }}
+        >
+          <Text weight="700" style={{ marginBottom: 10, fontSize: 12 }}>{`${mom(timeFilter).format("dddd - DD/MM/YY")}`}</Text>
           <FlatList
-            style={{
-              height: (height * 0.35),
-            }}
             contentContainerStyle={{
               gap: 5,
-              paddingVertical: 10
+              paddingVertical: 10,
+              flex: 1,
             }}
             keyExtractor={(item) => item.title.toString()}
-            data={transactions}
+            data={filtertedTransactions}
+            ListEmptyComponent={
+              <CenteringView>
+                <View style={{ opacity: 0.5 }}>
+                  <Icon size={50} name="inbox" type="feather" color={black} />
+                  <Text weight="700" style={{ marginTop: 10 }}>{`No Transactions ${timeFilterStr}`}</Text>
+                </View>
+              </CenteringView>
+            }
             renderItem={(transaction) => (
               <TouchableOpacity onLongPress={() => setEditingTransaction(transaction.item)}>
                 <TransactionHistoryItem transaction={transaction.item} />

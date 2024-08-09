@@ -24,7 +24,7 @@ export default function Header({ onPressSettings }: HeaderProps) {
       <View style={{ flexDirection: "row", alignItems: "center", flexGrow: 1 }}>
         <Avatar
           size={logoSize}
-          source={{ uri: user?.avatar || null }}
+          source={{ uri: user?.avatar }}
           containerStyle={{
             backgroundColor: primary,
             marginRight: 10

@@ -61,7 +61,10 @@ export default function TransactionHistoryItem({ transaction: { title, type, amo
 
         <View style={{ alignItems: "flex-end" }}>
           <Row style={{ alignItems: "center", gap: 5 }}>
-            <Text weight="500" style={{ fontSize: 10, opacity: 0.5 }}>{mom(createdAt).format("DD/MM/YY")}</Text>
+            <Row>
+              <Text weight="500" style={{ fontSize: 10, opacity: 0.5 }}>{mom(createdAt).format("DD/MM/YY")} </Text>
+              <Text weight="500" style={{ fontSize: 10, opacity: 0.5 }}>{mom(createdAt).format("HH:MM")}</Text>
+            </Row>
             <Icon size={10} name="clock" type="feather" />
           </Row>
           <Text weight='700' style={{ color: transactionTypeColors[type] }}>{`${transactionTypeSign[type]}${amount} ${baseCurrency}`}</Text>

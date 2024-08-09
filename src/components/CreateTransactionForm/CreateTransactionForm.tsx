@@ -18,7 +18,7 @@ import { Text } from '../Text';
 const transactionTypes = [
   "Expense",
   "Income",
-  // "Transfer"
+  "Transfer"
 ];
 
 interface CreateTransactionFormProps {
@@ -39,6 +39,7 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
   const { items: budgets } = useBudgetStore();
 
   const hasBudgets = budgets.length !== 0;
+  const isTransfer = (transactionType === "Transfer");
 
   const onSubmit = () => {
     const uuid = Crypto.generateRandomUUID();
@@ -79,7 +80,7 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
       <TextInput wrapperStyle={{ flexGrow: 1 }} label="Amount" keyboardType="numeric" onChangeText={setAmount} />
 
       {
-        categories.length != 0 && (
+        !isTransfer && categories.length != 0 && (
           <Selector
             label="Category"
             defaultValue={categories[0].title}
@@ -100,44 +101,50 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
         )
       }
 
-      <Row>
-        {hasBudgets &&
-          (<Selector
-            label="Budget"
-            defaultValue={budgets[0].title}
-            options={budgets.map((budget) => budget.title)}
-            onChange={(index) => setBudgetId(budgets[index].uuid)}
-          />)}
-        {
-          !hasBudgets &&
-          (
-            <View style={{ marginVertical: 10 }}>
-              <Text style={{ fontWeight: "bold", fontSize: 12, color: error, marginTop: 5 }}>
-                You need to create at least one budget to proceed
-              </Text>
-            </View>
-          )
-        }
-      </Row>
 
       {
-        transactionType === "Transfer" && (
+        !isTransfer && (
+          <Row>
+            {hasBudgets &&
+              (<Selector
+                label="Budget"
+                defaultValue={budgets[0].title}
+                options={budgets.map((budget) => budget.title)}
+                onChange={(index) => setBudgetId(budgets[index].uuid)}
+              />)}
+            {
+              !hasBudgets &&
+              (
+                <View style={{ marginVertical: 10 }}>
+                  <Text style={{ fontWeight: "bold", fontSize: 12, color: error, marginTop: 5 }}>
+                    You need to create at least one budget to proceed
+                  </Text>
+                </View>
+              )
+            }
+          </Row>
+        )
+      }
+
+      {
+        isTransfer && (
           <View style={{ flexGrow: 1, justifyContent: "space-between" }}>
             <Text style={{
               fontWeight: "bold",
             }}>Transfer Flow</Text>
             <Row style={{ justifyContent: "space-between", alignItems: "center", flex: 1 }}>
-              <TouchableOpacity >
-                <Text>Wallet</Text>
-              </TouchableOpacity>
-              <Row style={{ alignItems: "center" }}>
-                <Icon name="arrow-right" color={primary} size={35} />
-                <Icon name="arrow-right" color={primary} size={35} />
-                <Icon name="arrow-right" color={primary} size={35} />
-              </Row>
-              <TouchableOpacity >
-                <Text>Wallet</Text>
-              </TouchableOpacity>
+              <Selector
+                label="Source"
+                defaultValue={budgets[0].title}
+                options={budgets.map((budget) => budget.title)}
+                onChange={(index) => setBudgetId(budgets[index].uuid)}
+              />
+              <Selector
+                label="Destination"
+                defaultValue={budgets[0].title}
+                options={budgets.map((budget) => budget.title)}
+                onChange={(index) => setBudgetId(budgets[index].uuid)}
+              />
             </Row>
           </View>
 

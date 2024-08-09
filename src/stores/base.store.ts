@@ -15,8 +15,6 @@ interface BaseState<T> {
 const { storeData } = useAsyncStorage();
 
 export default function createBaseStore<T>(namespace: string) {
-
-
   return create<BaseState<T>>((set) => ({
     items: [],
 
@@ -76,6 +74,4 @@ export default function createBaseStore<T>(namespace: string) {
       })
     }
   }));
-
-}
-
+};

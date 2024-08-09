@@ -39,7 +39,7 @@ interface CreateCategoryFormProps {
 
 export default function CreateCategoryForm({ onCreate }: CreateCategoryFormProps) {
   const { height } = Dimensions.get('window');
-  const { theme: { colors: { primary, white, greyOutline, error, warning, success } } } = useTheme();
+  const { theme: { colors: { primary, white, greyOutline, error, warning, success, black } } } = useTheme();
   const [title, setTitle] = useState("");
   const [search, setSearch] = useState("");
   const [colorIndex, setColorIndex] = useState(0);
@@ -78,7 +78,7 @@ export default function CreateCategoryForm({ onCreate }: CreateCategoryFormProps
       {
         iconPickerIsOpen && (
           <>
-            <TextInput label={`Search title`} placeholder="Enter icon name" onChangeText={setSearch} />
+            <TextInput label={`Search icon`} placeholder="Enter icon name" onChangeText={setSearch} />
             <ExpandingView style={{ height: (height * 0.5) }}>
               <FlatList
                 bounces
@@ -103,7 +103,7 @@ export default function CreateCategoryForm({ onCreate }: CreateCategoryFormProps
                       aspectRatio: 1, borderRadius: 50, backgroundColor: greyOutline,
                       padding: 10, marginVertical: 5, justifyContent: "center", alignItems: "center"
                     }}>
-                    <Icon size={18} color={primary} name={item} type={getFamilyType(familyTitle)} />
+                    <Icon size={18} color={black} name={item} type={getFamilyType(familyTitle)} />
                   </TouchableOpacity>
                 )
                 } />
