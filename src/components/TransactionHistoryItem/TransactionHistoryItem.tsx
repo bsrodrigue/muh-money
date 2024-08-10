@@ -43,18 +43,21 @@ export default function TransactionHistoryItem({ transaction: { title, type, amo
           }}>
             {
               category && (
-                <Icon size={16} color={category.color} style={{}} name={category.iconName} type={category.iconFamily} />
+                <Icon
+                  size={16}
+                  color={category.color}
+                  name={category.iconName}
+                  type={category.iconFamily} />
               )
             }
             {
               !category && (
-
                 <Icon style={{ opacity: 0.5 }} name="money" />
               )
             }
           </View>
           <View>
-            <Text style={{ fontWeight: "bold", fontSize: 10, opacity: 0.5 }}>{budget.title}</Text>
+            <Text style={{ fontWeight: "bold", fontSize: 10, opacity: 0.5 }}>{budget?.title ?? "No Budget"}</Text>
             <Text style={{ fontWeight: "bold", fontSize: 12 }}>{title.length >= maxChars ? `${title.slice(0, maxChars)}...` : title}</Text>
           </View>
         </View>

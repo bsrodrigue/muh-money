@@ -15,3 +15,4 @@ export { ViewAccountScreen } from "./ViewAccountScreen";
 export { AccountsScreen } from './AccountsScreen'
 export { CategoriesScreen } from './CategoriesScreen'
 export { BudgetsScreen } from './BudgetsScreen' 
+export { TransactionsScreen } from './TransactionsScreen' 

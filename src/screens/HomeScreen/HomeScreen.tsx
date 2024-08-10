@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
 import React, { useState } from "react";
-import { CardBottomSheet, CenteringView, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, ScreenDivider, TotalBalanceCard, TransactionHistoryItem } from "../../components";
+import { CardBottomSheet, CenteringView, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, ScreenDivider, TotalBalanceCard, TransactionHistoryItem, TransactionList } from "../../components";
 import { View, FlatList, TouchableOpacity, Dimensions } from "react-native";
 import { Icon, useTheme } from "@rneui/themed";
 import { FAB } from "@rneui/base";
@@ -80,27 +80,10 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
           }}
         >
           <Text weight="700" style={{ marginBottom: 10, fontSize: 12 }}>{`${mom(timeFilter).format("dddd - DD/MM/YY")}`}</Text>
-          <FlatList
-            contentContainerStyle={{
-              gap: 5,
-              paddingVertical: 10,
-              flex: 1,
-            }}
-            keyExtractor={(item) => item.title.toString()}
-            data={filtertedTransactions}
-            ListEmptyComponent={
-              <CenteringView>
-                <View style={{ opacity: 0.5 }}>
-                  <Icon size={50} name="inbox" type="feather" color={black} />
-                  <Text weight="700" style={{ marginTop: 10 }}>{`No Transactions ${timeFilterStr}`}</Text>
-                </View>
-              </CenteringView>
-            }
-            renderItem={(transaction) => (
-              <TouchableOpacity onLongPress={() => setEditingTransaction(transaction.item)}>
-                <TransactionHistoryItem transaction={transaction.item} />
-              </TouchableOpacity>
-            )} />
+          <TransactionList
+            transactions={filtertedTransactions}
+            emptyStr={`No Transactions ${timeFilterStr}`}
+            onPress={setEditingTransaction} />
         </View>
       </View>
 

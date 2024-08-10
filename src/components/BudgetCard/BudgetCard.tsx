@@ -9,6 +9,7 @@ import { Text } from "../Text";
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
+import { truncate } from '../../lib/utils';
 
 interface BudgetCardProps {
   budget: Budget;
@@ -21,7 +22,7 @@ export default function BudgetCard({ budget }: BudgetCardProps) {
   const borderRadius = 10;
   const [currentBalance] = getRealBalanceFromBudget(budget, transactions);
 
-  const truncatedTitle = title.length > 20 ? title.slice(0, 20) + "..." : title;
+  const truncatedTitle = truncate(title, 20);
 
   const percentage = ((currentBalance / balance) * 100).toFixed();
   const progressWidth = useSharedValue(0);

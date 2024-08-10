@@ -19,7 +19,7 @@ export default function AccountsScreen({ navigation }: AccountsScreenProps) {
   return (
     <ExpandingView>
       <ScreenDivider />
-      <View style={{ backgroundColor: black }}>
+      <View>
         <View style={{ backgroundColor: primary, padding: 20, paddingHorizontal: 20 }}>
           <FlatList
             showsVerticalScrollIndicator={false}

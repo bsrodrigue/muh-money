@@ -3,6 +3,7 @@ import { TouchableOpacity, View } from "react-native";
 import { Avatar } from "@rneui/base";
 import { Text } from "../Text";
 import { useUserStore } from "../../stores";
+import { truncate } from "../../lib/utils";
 
 type HeaderProps = {
   searchMode?: boolean;
@@ -18,6 +19,7 @@ export default function Header({ onPressSettings }: HeaderProps) {
   const { theme: { colors: { primary, grey1, black, white } } } = useTheme();
   const logoSize = 50;
   const { user } = useUserStore();
+  const username = truncate(user?.username, 15) || "User"
 
   return (
     <View style={{ backgroundColor: black, alignItems: "center", flexDirection: "row", justifyContent: "center", padding: 15 }}>
@@ -33,7 +35,7 @@ export default function Header({ onPressSettings }: HeaderProps) {
         />
         <View >
           <Text style={{ color: white, fontSize: 12, opacity: 0.5 }}  >Welcome back</Text>
-          <Text weight="700" style={{ color: white, fontSize: 25 }}>{user.username || "Application User"}</Text>
+          <Text weight="700" style={{ color: white, fontSize: 25 }}>{username}</Text>
         </View>
       </View>
       <TouchableOpacity

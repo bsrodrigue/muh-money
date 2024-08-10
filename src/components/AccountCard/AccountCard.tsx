@@ -19,7 +19,11 @@ export default function AccountCard({ account }: AccountCardProps) {
   const [total, incomes, expenses] = getRealBalanceFromAccount(account, transactions);
 
   return (
-    <View style={{ backgroundColor: white, padding: 10, paddingHorizontal: 20, borderRadius: 10, marginVertical: 10 }}>
+    <View style={{
+      backgroundColor: white,
+      padding: 10, paddingHorizontal: 20, borderRadius: 10,
+      marginVertical: 10, marginHorizontal: 5,
+    }}>
       <View>
         <Text weight="500" style={{ opacity: 0.5, marginBottom: -5 }}>{type}</Text>
         <Text weight="700" style={{ fontSize: 20 }}>{title}</Text>

@@ -9,6 +9,7 @@ import { HomeScreen } from "../HomeScreen";
 import { AccountsScreen } from "../AccountsScreen";
 import { BudgetsScreen } from "../BudgetsScreen";
 import { CategoriesScreen } from "../CategoriesScreen";
+import { TransactionsScreen } from "../TransactionsScreen";
 
 interface TabIconProps {
   icon: string;
@@ -41,7 +42,9 @@ export default function MainScreen({ navigation }: MainScreenProps) {
 
   return (
     <View style={styles.container}>
-      <LogoutDialog isVisible={logoutDialogIsvisible} onDismissDialog={() => setLogoutDialogIsVisible(false)} />
+      <LogoutDialog
+        isVisible={logoutDialogIsvisible}
+        onDismissDialog={() => setLogoutDialogIsVisible(false)} />
       <Tab.Navigator
         screenOptions={{
           tabBarStyle: {
@@ -51,8 +54,8 @@ export default function MainScreen({ navigation }: MainScreenProps) {
             shadowColor: white
           },
           tabBarLabelStyle: {
-            fontSize: 12,
-            fontFamily: "font-600",
+            fontSize: 10,
+            fontFamily: "font-700",
             marginBottom: 5,
             color: black,
           },
@@ -65,12 +68,18 @@ export default function MainScreen({ navigation }: MainScreenProps) {
         }}>
         <Tab.Screen
           options={{
-            headerShown: true,
             tabBarLabel: "Home",
             tabBarIcon: ({ focused }) => <TabIcon icon="home" focused={focused} />,
           }}
           name="Home"
           component={HomeScreen} />
+        <Tab.Screen
+          options={{
+            tabBarLabel: "Transactions",
+            tabBarIcon: ({ focused }) => <TabIcon icon="list-circle" type="ionicon" focused={focused} />,
+          }}
+          name="Transactions"
+          component={TransactionsScreen} />
         <Tab.Screen
           options={{
             tabBarLabel: "Accounts",
