@@ -22,30 +22,28 @@ export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps)
   return (
     <ExpandingView>
       <ScreenDivider />
-      <View style={{ flex: 1, backgroundColor: black }}>
-        <View style={{
-          backgroundColor: white,
-          padding: 20, paddingHorizontal: 20,
-        }}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingBottom: 50,
-            }}
-            data={items}
-            ListEmptyComponent={
-              <View style={{ opacity: 1, justifyContent: "center", alignItems: "center", flex: 1, margin: "auto" }}>
-                <Icon size={50} name="cash" type="ionicon" color={white} />
-                <Text weight="700" style={{ color: white, marginTop: 10 }}>You have no budgets</Text>
-              </View>
-            }
-            keyExtractor={(_item, number) => number.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity onLongPress={() => setEditingBudget(item)}>
-                <BudgetCard budget={item} />
-              </TouchableOpacity>
-            )} />
-        </View>
+      <View style={{
+        backgroundColor: white,
+        padding: 20, paddingHorizontal: 20,
+      }}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 50,
+          }}
+          data={items}
+          ListEmptyComponent={
+            <View style={{ opacity: 1, justifyContent: "center", alignItems: "center", flex: 1, margin: "auto" }}>
+              <Icon size={50} name="cash" type="ionicon" color={white} />
+              <Text weight="700" style={{ color: white, marginTop: 10 }}>You have no budgets</Text>
+            </View>
+          }
+          keyExtractor={(_item, number) => number.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity onLongPress={() => setEditingBudget(item)}>
+              <BudgetCard budget={item} />
+            </TouchableOpacity>
+          )} />
       </View>
 
       <FAB
