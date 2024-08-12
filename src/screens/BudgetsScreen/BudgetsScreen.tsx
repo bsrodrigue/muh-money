@@ -14,7 +14,6 @@ type BudgetsScreenProps = NativeStackScreenProps<RootStackParamList, 'Budgets'>;
 
 export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps) {
   const { theme: { colors: { black, primary, white } } } = useTheme();
-  const { height } = Dimensions.get("window");
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
   const [editingBudget, setEditingBudget] = useState(null);
 
@@ -27,7 +26,6 @@ export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps)
         <View style={{
           backgroundColor: white,
           padding: 20, paddingHorizontal: 20,
-          height: (height * 0.8)
         }}>
           <FlatList
             showsVerticalScrollIndicator={false}

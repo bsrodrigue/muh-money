@@ -12,7 +12,7 @@ interface AccountCardProps {
 }
 
 export default function AccountCard({ account }: AccountCardProps) {
-  const { theme: { colors: { white, success, error } } } = useTheme();
+  const { theme: { colors: { white, success, error, greyOutline } } } = useTheme();
   const { items: transactions } = useTransactionStore();
   const { title, type } = account;
 
@@ -21,17 +21,18 @@ export default function AccountCard({ account }: AccountCardProps) {
   return (
     <View style={{
       backgroundColor: white,
-      padding: 10, paddingHorizontal: 20, borderRadius: 10,
-      marginVertical: 10, marginHorizontal: 5,
+      padding: 10, paddingHorizontal: 20, borderRadius: 20,
+      borderColor: greyOutline, borderWidth: 1,
+      marginHorizontal: 5,
     }}>
       <View>
-        <Text weight="500" style={{ opacity: 0.5, marginBottom: -5 }}>{type}</Text>
+        <Text weight="700" style={{ opacity: 0.5, fontSize: 10 }}>{type}</Text>
         <Text weight="700" style={{ fontSize: 20 }}>{title}</Text>
       </View>
-      <View style={{ marginVertical: 5 }}>
-        <Text style={{ opacity: 0.5, marginBottom: -5 }}>Total Balance</Text>
-        <Text style={{ fontSize: 25 }}>{`${total.toLocaleString()} ${baseCurrency}`}</Text>
-      </View>
+      <Row style={{ alignItems: "center", justifyContent: "space-between" }}>
+        <Text weight="700" style={{ opacity: 0.5 }}>Total Balance</Text>
+        <Text weight="700" style={{ fontSize: 20 }}>{`${total.toLocaleString()} ${baseCurrency}`}</Text>
+      </Row>
       <Row style={{ justifyContent: "space-between" }}>
         <View>
           <Text weight='600' style={{ color: success }}>Incomes</Text>

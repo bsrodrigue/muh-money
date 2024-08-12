@@ -17,7 +17,6 @@ export default function AccountsScreen({ navigation }: AccountsScreenProps) {
   const { theme: { colors: { primary, white } } } = useTheme();
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
   const [editingAccount, setEditingAccount] = useState(null);
-  const { height } = Dimensions.get("window");
   const { items, create, update, remove } = useAccountStore();
 
   return (
@@ -25,21 +24,23 @@ export default function AccountsScreen({ navigation }: AccountsScreenProps) {
       <ScreenDivider />
       <View style={{ flex: 1 }}>
         <View style={{
-          backgroundColor: primary,
-          padding: 20, paddingHorizontal: 20,
-          height: (height * 0.8),
+          backgroundColor: white,
+          paddingHorizontal: 10,
+          paddingVertical: 10,
+          flex: 1
         }}>
           <FlatList
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
-              paddingBottom: 50,
+              gap: 10,
+              paddingBottom: 50
             }}
             data={items}
             keyExtractor={(_item, number) => number.toString()}
             ListEmptyComponent={
               <View style={{ opacity: 1, justifyContent: "center", alignItems: "center", flex: 1, margin: "auto" }}>
-                <Icon size={50} name="wallet" type="ionicon" color={white} />
-                <Text weight="700" style={{ color: white, marginTop: 10 }}>You have no accounts</Text>
+                <Icon size={50} name="wallet" type="ionicon" color={primary} />
+                <Text weight="700" style={{ color: primary, marginTop: 10 }}>You have no accounts</Text>
               </View>
             }
             renderItem={({ item }) => (

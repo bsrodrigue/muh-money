@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
-import { CardBottomSheet, CreateCategoryForm, EditCategoryForm, ExpandingView, Row } from "../../components";
+import { CardBottomSheet, CreateCategoryForm, EditCategoryForm, ExpandingView, Row, ScreenDivider } from "../../components";
 import { FAB } from "@rneui/base";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Icon, useTheme } from "@rneui/themed";
 import { useCategoryStore } from "../../stores";
 import { FlatList, TouchableOpacity, View } from "react-native";
@@ -16,13 +16,19 @@ export default function CategoriesScreen({ navigation, route }: CategoriesScreen
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false)
   const [editingCategory, setEditingCategory] = useState(null)
   const { create, update, remove, items } = useCategoryStore();
+  const colRef = useRef(2);
 
   return (
     <ExpandingView>
+      <ScreenDivider />
       <FlatList
+        numColumns={colRef.current}
         contentContainerStyle={{
           padding: 10,
           paddingHorizontal: 20
+        }}
+        columnWrapperStyle={{
+          gap: 10
         }}
         data={items}
         renderItem={({ item }) => (
@@ -33,7 +39,8 @@ export default function CategoriesScreen({ navigation, route }: CategoriesScreen
               borderRadius: 50,
               borderWidth: 1,
               borderColor: greyOutline,
-              padding: 10
+              padding: 10,
+              flexGrow: 1
             }}
             onLongPress={() => setEditingCategory(item)}
           >
@@ -43,7 +50,7 @@ export default function CategoriesScreen({ navigation, route }: CategoriesScreen
               </View>
               <Text weight="700" style={{
                 fontSize: 12,
-              }}>{truncate(item?.title || "", 20)}</Text>
+              }}>{truncate(item?.title || "", 10)}</Text>
             </Row>
           </TouchableOpacity>
         )} />

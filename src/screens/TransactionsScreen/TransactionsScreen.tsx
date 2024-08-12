@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
-import { AccountPicker, BudgetPicker, CategoryPicker, ExpandingView, FilterBadge, Row, TextInput, TransactionList } from "../../components"
+import { AccountPicker, BudgetPicker, CategoryPicker, ExpandingView, FilterBadge, Row, ScreenDivider, TextInput, TransactionList } from "../../components"
 import { useAccountStore, useBudgetStore, useCategoryStore, useTransactionStore } from "../../stores";
 import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
@@ -64,54 +64,57 @@ export default function TransactionsScreen({ navigation, route }: TransactionsSc
     });
 
   return (
-    <ExpandingView style={{ paddingHorizontal: 10, paddingTop: 5 }}>
-      <TouchableOpacity
-        onPress={() => setSorting(sorting === "Newest" ? "Oldest" : "Newest")}
-        style={{ opacity: 0.5 }}>
-        <Row style={{ alignItems: "center", gap: 5 }}>
-          <Text weight="700">{`Sort by ${sorting}`}</Text>
-          <Icon type="material-community" name={`sort-clock-${sortingsTypes[sorting]}`} />
-        </Row>
-      </TouchableOpacity>
-      <TransactionList
-        transactions={filteredItems}
-        emptyStr={`No Transactions Found`}
-        order={sortingsTypes[sorting]}
-      />
-      <View style={{ paddingTop: 10 }}>
-        <Row style={{ gap: 5, marginBottom: 5 }}>
+    <ExpandingView >
+      <ScreenDivider />
+      <View style={{ flex: 1, paddingHorizontal: 10 }}>
+        <TouchableOpacity
+          onPress={() => setSorting(sorting === "Newest" ? "Oldest" : "Newest")}
+          style={{ opacity: 0.5 }}>
+          <Row style={{ alignItems: "center", gap: 5 }}>
+            <Text weight="700">{`Sort by ${sorting}`}</Text>
+            <Icon type="material-community" name={`sort-clock-${sortingsTypes[sorting]}`} />
+          </Row>
+        </TouchableOpacity>
+        <TransactionList
+          transactions={filteredItems}
+          emptyStr={`No Transactions Found`}
+          order={sortingsTypes[sorting]}
+        />
+        <View style={{ paddingTop: 10 }}>
+          <Row style={{ gap: 5, marginBottom: 5 }}>
+            {
+              filters.map((filter, index) => (
+                <FilterBadge
+                  key={filter}
+                  label={filter}
+                  active={filterIndex == index}
+                  onPress={() => {
+                    const alreadyActive = (filterIndex == index);
+                    setFilterIndex(alreadyActive ? null : index);
+                  }
+                  }
+                />
+              ))
+            }
+          </Row>
           {
-            filters.map((filter, index) => (
-              <FilterBadge
-                key={filter}
-                label={filter}
-                active={filterIndex == index}
-                onPress={() => {
-                  const alreadyActive = (filterIndex == index);
-                  setFilterIndex(alreadyActive ? null : index);
-                }
-                }
-              />
-            ))
+            filter === "Account" && (
+              <AccountPicker currentId={accountId} onSelect={setAccountId} />
+            )
           }
-        </Row>
-        {
-          filter === "Account" && (
-            <AccountPicker currentId={accountId} onSelect={setAccountId} />
-          )
-        }
-        {
-          filter === "Budget" && (
-            <BudgetPicker currentId={budgetId} onSelect={setBudgetId} />
-          )
-        }
-        {
-          filter === "Category" && (
-            <CategoryPicker currentId={categoryId} onSelect={setCategoryId} />
-          )
-        }
-        <TextInput placeholder={`Search for Transactions...`} onChangeText={setSearchTerm} />
+          {
+            filter === "Budget" && (
+              <BudgetPicker currentId={budgetId} onSelect={setBudgetId} />
+            )
+          }
+          {
+            filter === "Category" && (
+              <CategoryPicker currentId={categoryId} onSelect={setCategoryId} />
+            )
+          }
+          <TextInput placeholder={`Search for Transactions...`} onChangeText={setSearchTerm} />
 
+        </View>
       </View>
     </ExpandingView>
   )
