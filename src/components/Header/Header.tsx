@@ -13,13 +13,14 @@ type HeaderProps = {
   onChange?: (value: string) => void;
   onPressLogout?: () => void;
   loading?: boolean;
+  screen?: string;
 };
 
-export default function Header({ onPressSettings }: HeaderProps) {
+export default function Header({ onPressSettings, screen }: HeaderProps) {
   const { theme: { colors: { primary, grey1, black, white } } } = useTheme();
   const logoSize = 50;
   const { user } = useUserStore();
-  const username = truncate(user?.username, 15) || "User"
+  const username = truncate(user?.username || "User", 15);
 
   return (
     <View style={{ backgroundColor: black, alignItems: "center", flexDirection: "row", justifyContent: "center", padding: 15 }}>

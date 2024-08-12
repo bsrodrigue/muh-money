@@ -1,18 +1,21 @@
-import { Icon, useTheme } from '@rneui/themed';
+import { useTheme } from '@rneui/themed';
 import { View } from 'react-native';
 import { ExpandingView } from '../ExpandingView';
 import { Row } from '../Row';
 import { ToggleButton } from '../ToggleButton';
 import { TextInput } from '../Input';
 import { Button } from '../Button';
-import { Transaction, TransactionCategory, TransactionType } from '../../types/models';
+import { Transaction, TransactionType } from '../../types/models';
 import { useEffect, useState } from 'react';
 import { useSharedValue, withSpring } from 'react-native-reanimated';
-import { Selector } from '../Selector';
 import { useBudgetStore, useCategoryStore } from '../../stores';
 import { Text } from '../Text';
 import { FilterBadge } from '../FilterBadge';
 import { transactionTypeColors, transactionTypes } from '../../config';
+import { CategoryPicker } from '../CategoryPicker';
+import { BudgetPicker } from '../BudgetPicker';
+import { DateTimePicker } from '../DateTimePicker';
+import { AccountPicker } from '../AccountPicker';
 
 interface EditTransactionFormProps {
   transaction: Transaction;
@@ -21,26 +24,36 @@ interface EditTransactionFormProps {
 }
 
 export default function EditTransactionForm({ transaction, onEdit, onDelete }: EditTransactionFormProps) {
-  const { theme: { colors: { error, black, greyOutline, primary } } } = useTheme();
+  const { theme: { colors: { error, black, primary } } } = useTheme();
   const [optionsIsActive, setOptionsIsActive] = useState(false);
   const [transactionType, setTransactionType] = useState<TransactionType>(transaction.type);
   const [title, setTitle] = useState(transaction.title);
   const [amount, setAmount] = useState(transaction.amount.toString());
   const [categoryId, setCategoryId] = useState(transaction.categoryId);
-  const [budgetId, setBudgetId] = useState("");
+  const [date, setDate] = useState(new Date(transaction.date));
+  const [time, setTime] = useState(new Date(transaction.time));
+  const [budgetId, setBudgetId] = useState(transaction?.budgetId);
+  const [accountId, setAccountId] = useState(transaction?.accountId);
 
   const { items: categories } = useCategoryStore();
   const { items: budgets } = useBudgetStore();
 
   const height = useSharedValue(10);
 
-  const hasBudgets = budgets.length !== 0;
   const isTransfer = (transactionType === "Transfer");
+  const isValid = title && amount && date && time;
+  const budget = budgets.find((budget) => budget.uuid === budgetId);
 
   const onSubmit = () => {
-    const budget = budgets.find((budget) => budget.uuid === budgetId);
     const data: Transaction =
-      Object.assign(transaction, { title, amount: parseFloat(amount), categoryId, budgetId: budget?.uuid, linkedAccount: budget?.linkedAccount });
+      Object.assign(transaction,
+        {
+          title, amount: parseFloat(amount), categoryId,
+          budgetId: budget?.uuid || "",
+          accountId: budget?.linkedAccount || accountId,
+          type: transactionType,
+          date, time,
+        });
 
     onEdit(data);
   }
@@ -78,60 +91,32 @@ export default function EditTransactionForm({ transaction, onEdit, onDelete }: E
         onChangeText={setAmount}
       />
 
-      <Row>
-        {
-          categories.length != 0 && (
-            <Selector
-              label="Category"
-              defaultValue={categories.find((cat) => cat.uuid === categoryId)?.title ?? categories[0].title}
-              options={categories.map((category) => category.title)}
-              onChange={(index) => {
-                setCategoryId(categories[index].uuid);
-              }}
-              OptionComponent={(optionTitle) => {
-                const option = categories.find((item) => item.title === optionTitle) as TransactionCategory;
-                return (
-                  <Row style={{ alignItems: "center", gap: 10 }}>
-                    <View style={{ aspectRatio: 1, borderRadius: 50, borderColor: greyOutline, borderWidth: 1, padding: 5 }}>
-                      <Icon size={14} name={option.iconName} type={option.iconFamily} color={option.color} />
-                    </View>
-                    <Text weight='700'>{option.title}</Text>
-                  </Row>
-                )
-              }}
-            />
-          )
-        }
+      {
+        !isTransfer && categories.length != 0 &&
+        (<CategoryPicker
+          currentId={categoryId}
+          onSelect={(id) => setCategoryId(id)} />)
+      }
 
+      <View style={{ marginBottom: 10 }}>
         {
           !isTransfer && (
-            <Row>
-              {hasBudgets &&
-                (<Selector
-                  label="Budget"
-                  defaultValue={budgets[0].title}
-                  options={budgets.map((budget) => budget.title)}
-                  onChange={(index) => setBudgetId(budgets[index].uuid)}
-                />)}
-              {
-                !hasBudgets &&
-                (
-                  <View style={{ marginVertical: 10 }}>
-                    <Text style={{ fontWeight: "bold", fontSize: 12, color: error, marginTop: 5 }}>
-                      You need to create at least one budget to proceed
-                    </Text>
-                  </View>
-                )
-              }
-            </Row>
+            <BudgetPicker currentId={budgetId} onSelect={(id) => setBudgetId(id)} />
           )
         }
+      </View>
 
-      </Row>
+      <View>
+        {
+          !budget?.linkedAccount && (
+            <AccountPicker currentId={accountId} onSelect={(id) => setAccountId(id)} />
+          )
+        }
+      </View>
 
       {
         optionsIsActive && (
-          <View style={{ marginVertical: 10 }}>
+          <View style={{ marginVertical: 10, }}>
             <Button onPress={() => onDelete(transaction.uuid)} color={error}
               titleStyle={{ color: black, opacity: 0.5, fontWeight: "bold" }}>Delete Transaction</Button>
             <Text style={{ fontWeight: "bold", fontSize: 12, color: error, marginTop: 5 }}>
@@ -141,7 +126,12 @@ export default function EditTransactionForm({ transaction, onEdit, onDelete }: E
         )
       }
 
-      <Button title="Submit" onPress={onSubmit} />
+      <Row style={{ gap: 5 }}>
+        <DateTimePicker label="Date" containerStyle={{ flexGrow: 1 }} date={date} onChange={setDate} mode="date" />
+        <DateTimePicker label="Time" containerStyle={{ flexGrow: 1 }} date={time} onChange={setTime} mode="time" />
+      </Row>
+
+      <Button title="Submit" onPress={onSubmit} disabled={!isValid} />
     </ExpandingView>
   );
 }

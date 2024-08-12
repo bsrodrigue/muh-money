@@ -3,23 +3,41 @@ import { useTheme } from "@rneui/themed";
 import { forwardRef } from "react";
 import { View, ViewStyle } from "react-native";
 import { Text } from "../Text";
+import { Row } from "../Row";
 
 type TextInputProps = {
   name?: string;
   label?: string;
   wrapperStyle?: ViewStyle;
+  suffix?: string;
 } & InputProps;
 
-const TextInput = forwardRef(({ onChange, wrapperStyle, label, inputStyle, errorStyle, ...props }: TextInputProps, ref) => {
-  const { theme: { colors: { error } } } = useTheme();
-  const borderRadius = 5;
+const TextInput = forwardRef(({ onChange, wrapperStyle, label, inputStyle, errorStyle, suffix, ...props }: TextInputProps, ref) => {
+  const { theme: { colors: { error, greyOutline } } } = useTheme();
+  const borderRadius = 50;
   const backgroundColor = "#f1eff2";
 
   return (
-    <View style={wrapperStyle}>
+    <View style={[{
+      position: "relative",
+      borderWidth: 1,
+      borderRadius,
+      marginVertical: 5,
+      borderColor: greyOutline
+    }, wrapperStyle]}>
       {
         label && (
-          <Text weight="600">{label}</Text>
+          <Row>
+            <Text
+              style={{
+                position: "absolute",
+                zIndex: 1,
+                left: 20,
+                top: 0,
+                fontSize: 10,
+                opacity: 0.5,
+              }} weight="700">{label}</Text>
+          </Row>
         )
       }
       <Input
@@ -38,14 +56,13 @@ const TextInput = forwardRef(({ onChange, wrapperStyle, label, inputStyle, error
           ]
         }
         containerStyle={{
-          marginVertical: 5,
           backgroundColor,
           borderRadius,
         }}
         inputStyle={
           [
             {
-              fontSize: 14,
+              fontSize: 12,
               fontFamily: "font-600",
               height: 30
             },

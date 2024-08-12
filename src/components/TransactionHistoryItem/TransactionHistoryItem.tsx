@@ -38,21 +38,20 @@ export default function TransactionHistoryItem({ transaction: { title, type, amo
             borderRadius: 50,
             padding: 5,
             marginRight: 5,
-            borderColor: greyOutline,
-            borderWidth: 1,
+            backgroundColor: category?.color || greyOutline,
           }}>
             {
               category && (
                 <Icon
                   size={16}
-                  color={category.color}
+                  color="white"
                   name={category.iconName}
                   type={category.iconFamily} />
               )
             }
             {
               !category && (
-                <Icon style={{ opacity: 0.5 }} name="money" />
+                <Icon size={16} style={{ opacity: 0.5 }} type='antdesign' name="questioncircle" />
               )
             }
           </View>

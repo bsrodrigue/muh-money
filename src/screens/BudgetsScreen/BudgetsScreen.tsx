@@ -1,16 +1,19 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
-import { BudgetCard, CardBottomSheet, CreateBudgetForm, EditBudgetForm, ExpandingView, ScreenDivider } from "../../components"
+import {
+  BudgetCard, CardBottomSheet, CreateBudgetForm,
+  EditBudgetForm, ExpandingView, ScreenDivider, Text
+} from "../../components"
 import { FAB } from "@rneui/base";
 import { View, FlatList, TouchableOpacity, Dimensions } from "react-native";
-import { useTheme } from "@rneui/themed";
+import { Icon, useTheme } from "@rneui/themed";
 import { useState } from "react";
 import { useBudgetStore } from "../../stores";
 
 type BudgetsScreenProps = NativeStackScreenProps<RootStackParamList, 'Budgets'>;
 
 export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps) {
-  const { theme: { colors: { black, primary } } } = useTheme();
+  const { theme: { colors: { black, primary, white } } } = useTheme();
   const { height } = Dimensions.get("window");
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
   const [editingBudget, setEditingBudget] = useState(null);
@@ -20,17 +23,24 @@ export default function BudgetsScreen({ navigation, route }: BudgetsScreenProps)
   return (
     <ExpandingView>
       <ScreenDivider />
-      <View style={{ backgroundColor: black }}>
-        <View style={{ backgroundColor: primary, padding: 20, paddingHorizontal: 20 }}>
+      <View style={{ flex: 1, backgroundColor: black }}>
+        <View style={{
+          backgroundColor: white,
+          padding: 20, paddingHorizontal: 20,
+          height: (height * 0.8)
+        }}>
           <FlatList
             showsVerticalScrollIndicator={false}
-            style={{
-              height: (height * 0.8)
-            }}
             contentContainerStyle={{
-              paddingBottom: 50
+              paddingBottom: 50,
             }}
             data={items}
+            ListEmptyComponent={
+              <View style={{ opacity: 1, justifyContent: "center", alignItems: "center", flex: 1, margin: "auto" }}>
+                <Icon size={50} name="cash" type="ionicon" color={white} />
+                <Text weight="700" style={{ color: white, marginTop: 10 }}>You have no budgets</Text>
+              </View>
+            }
             keyExtractor={(_item, number) => number.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity onLongPress={() => setEditingBudget(item)}>

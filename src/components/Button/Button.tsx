@@ -8,7 +8,11 @@ export default function Button({ titleStyle, ...rest }: ButtonProps) {
 
   return (
     <BaseButton
-      titleStyle={[{ fontFamily: "font-700", fontSize: 16 }, titleStyle]}
+      containerStyle={{
+        borderRadius: 50,
+        marginVertical: 10
+      }}
+      titleStyle={[{ fontFamily: "font-700", fontSize: 16, lineHeight: 20 }, titleStyle]}
       color={rest.color || primary}
       size="md"
       radius={5}

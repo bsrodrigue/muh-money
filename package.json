@@ -37,7 +37,6 @@
     "expo-splash-screen": "~0.27.4",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.4",
-    "firebase": "^10.1.0",
     "formik": "^2.4.2",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",

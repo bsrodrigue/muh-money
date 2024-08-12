@@ -1,14 +1,15 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
 import React, { useState } from "react";
-import { CardBottomSheet, CenteringView, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, ScreenDivider, TotalBalanceCard, TransactionHistoryItem, TransactionList } from "../../components";
-import { View, FlatList, TouchableOpacity, Dimensions } from "react-native";
-import { Icon, useTheme } from "@rneui/themed";
+import { CardBottomSheet, CreateTransactionForm, EditTransactionForm, ExpandingView, FilterBadge, Row, ScreenDivider, TotalBalanceCard, TransactionList } from "../../components";
+import { View } from "react-native";
+import { useTheme } from "@rneui/themed";
 import { FAB } from "@rneui/base";
 import { useTransactionStore } from "../../stores/transaction.store";
 import { Text } from "../../components";
 import { mom } from "../../lib/moment";
 import { setDayToStart, setMonthToStart, setWeekToStart } from "../../lib/datetime";
+import { debounce } from "../../lib/utils";
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -35,7 +36,6 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
   const [createFormIsVisible, setCreateFormIsVisible] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [timeFilterIndex, setTimeFilter] = useState(0);
-  const { height } = Dimensions.get("window");
 
   const { items: transactions, create, update, remove } = useTransactionStore();
 
@@ -76,19 +76,21 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       <View style={{ paddingHorizontal: 20 }}>
         <View
           style={{
-            height: (height * 0.35),
+            height: "100%"
           }}
         >
           <Text weight="700" style={{ marginBottom: 10, fontSize: 12 }}>{`${mom(timeFilter).format("dddd - DD/MM/YY")}`}</Text>
           <TransactionList
             transactions={filtertedTransactions}
             emptyStr={`No Transactions ${timeFilterStr}`}
-            onPress={setEditingTransaction} />
+            onPress={setEditingTransaction}
+          />
         </View>
       </View>
 
-      <FAB onPress={() =>
-        setCreateFormIsVisible(true)}
+      <FAB
+        onPress={() =>
+          setCreateFormIsVisible(true)}
         title="Create Transaction"
         size="small" color={primary}
         placement="right" titleStyle={{ fontSize: 12, fontFamily: "font-700" }} />

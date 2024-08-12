@@ -1,20 +1,28 @@
 module.exports = {
   "expo": {
-    "name": "muh_money",
-    "description": "My money is infinite",
-    "githubUrl": "https://github.com/bsrodrigue/pmub-rn",
+    "name": "Budget",
+    "description": "Simple budget app",
+    "githubUrl": "https://github.com/bsrodrigue/muh-money",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/icons/android/res/mipmap-xxxhdpi/ic_launcher.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "backgroundColor": "#22A39F"
+      "backgroundColor": "#265073"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "plugins": [
       "expo-font",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "useLegacyPackaging": true,
+          }
+        }
+      ]
     ]
     ,
     "ios": {
@@ -25,7 +33,7 @@ module.exports = {
         "foregroundImage": "./src/assets/icons/android/res/mipmap-xxxhdpi/ic_launcher.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "bf.bsrodrigue.muh_money"
+      "package": "bf.bsrodrigue.muh_money",
     },
     "extra": {
       "eas": {

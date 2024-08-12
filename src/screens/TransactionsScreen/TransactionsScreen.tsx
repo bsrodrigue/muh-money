@@ -3,6 +3,9 @@ import { RootStackParamList } from "../../types";
 import { ExpandingView, FilterBadge, Row, TextInput, TransactionList } from "../../components"
 import { useAccountStore, useBudgetStore, useCategoryStore, useTransactionStore } from "../../stores";
 import { useState } from "react";
+import { TouchableOpacity } from "react-native";
+import { Icon } from "@rneui/themed";
+import { Text } from "../../components";
 
 type TransactionsScreenProps = NativeStackScreenProps<RootStackParamList, 'Transactions'>;
 
@@ -20,6 +23,7 @@ export default function TransactionsScreen({ navigation, route }: TransactionsSc
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterIndex, setFilterIndex] = useState(null);
+  const [sorting, setSorting] = useState("Newest");
 
   const filter = (filterIndex !== null) ? filters[filterIndex] : "";
 
@@ -35,6 +39,11 @@ export default function TransactionsScreen({ navigation, route }: TransactionsSc
     "Category": "categoryId",
   }
 
+  const sortingsTypes = {
+    "Newest": "descending",
+    "Oldest": "ascending",
+  }
+
   const filteredItems = filter ?
     items.filter((transaction) => {
       const store: { uuid: string, title: string }[] = filterStores[filter];
@@ -46,10 +55,19 @@ export default function TransactionsScreen({ navigation, route }: TransactionsSc
     }) : items.filter((transaction) => transaction.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
-    <ExpandingView style={{ paddingHorizontal: 10 }}>
+    <ExpandingView style={{ paddingHorizontal: 10, paddingTop: 5 }}>
+      <TouchableOpacity
+        onPress={() => setSorting(sorting === "Newest" ? "Oldest" : "Newest")}
+        style={{ opacity: 0.5 }}>
+        <Row style={{ alignItems: "center", gap: 5 }}>
+          <Text weight="700">{`Sort by ${sorting}`}</Text>
+          <Icon type="material-community" name={`sort-clock-${sortingsTypes[sorting]}`} />
+        </Row>
+      </TouchableOpacity>
       <TransactionList
         transactions={filteredItems}
         emptyStr={`No Transactions Found`}
+        order={sortingsTypes[sorting]}
       />
       <Row style={{ gap: 5, marginBottom: 5 }}>
         {

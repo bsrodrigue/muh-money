@@ -8,7 +8,7 @@ export interface ID {
 };
 
 export type TransactionType = "Expense" | "Income" | "Transfer";
-export type AccountType = "Cash" | "Bank" | "Mobile Money";
+export type AccountType = "Cash" | "Bank" | "Mobile Money" | "Wallet";
 
 export interface TransactionCategory {
   uuid?: string;

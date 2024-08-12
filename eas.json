@@ -16,7 +16,8 @@
     "production": {
       "distribution": "store",
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease --project-prop reactNativeArchitectures=arm64-v8a"
       }
     }
   },
