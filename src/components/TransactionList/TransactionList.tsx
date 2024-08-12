@@ -41,7 +41,7 @@ export default function TransactionList({ transactions, emptyStr, order = "desce
         </CenteringView>
       }
       renderItem={({ item }) => (
-        <TouchableOpacity onLongPress={() => onPress(item)}>
+        <TouchableOpacity onLongPress={() => onPress?.(item)}>
           <TransactionHistoryItem transaction={item} />
         </TouchableOpacity>
       )} />

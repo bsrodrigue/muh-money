@@ -41,7 +41,7 @@ export default function TotalBalanceCard({ }: TotalBalanceCardProps) {
     <View style={{
       backgroundColor: primary,
       padding: 20,
-      borderRadius: 20,
+      borderRadius: 30,
       justifyContent: "space-between"
     }}>
       <View>
@@ -71,7 +71,7 @@ interface SubCardProps {
 function SubCard({ label, balanceString, color }: SubCardProps) {
   const { theme: { colors: { white } } } = useTheme();
   return (
-    <View style={[{ backgroundColor: white, padding: 10, flexGrow: 1, borderRadius: 5 }, shadowStyle]}>
+    <View style={[{ backgroundColor: white, padding: 10, flexGrow: 1, borderRadius: 15 }, shadowStyle]}>
       <Row style={{ alignItems: "center", gap: 5 }}>
         <ColorDot color={color} />
         <Text weight='700' style={{ fontSize: 12, opacity: 0.8 }}>{label}</Text>

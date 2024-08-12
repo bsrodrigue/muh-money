@@ -10,7 +10,7 @@ import { Transaction, TransactionType } from '../../types/models';
 import { transactionTypeColors, transactionTypes } from '../../config';
 import { DateTimePicker } from '../DateTimePicker';
 import { Selector } from '../Selector';
-import { useBudgetStore, useCategoryStore } from '../../stores';
+import { useAccountStore, useBudgetStore, useCategoryStore } from '../../stores';
 import Crypto from '../../lib/crypto';
 import { Text } from '../Text';
 import { CategoryPicker } from '../CategoryPicker';
@@ -31,6 +31,9 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
   const [budgetId, setBudgetId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [accountId, setAccountId] = useState("");
+
+  const [sourceAccountId, setSourceAccountId] = useState("");
+  const [destinationAccountId, setDestinationAccountId] = useState("");
 
   const { items: categories } = useCategoryStore();
   const { items: budgets } = useBudgetStore();
@@ -53,6 +56,8 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
       accountId: budget?.linkedAccount || accountId,
       budgetId: budget?.uuid || "",
       categoryId,
+      sourceAccountId,
+      destinationAccountId
     }
 
     onCreate(data);
@@ -92,7 +97,7 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
       </View>
       <View>
         {
-          !budget?.linkedAccount && (
+          !isTransfer && !budget?.linkedAccount && (
             <AccountPicker currentId={accountId} onSelect={(id) => setAccountId(id)} />
           )
         }
@@ -103,21 +108,24 @@ export default function CreateTransactionForm({ onCreate }: CreateTransactionFor
           <View style={{ flexGrow: 1, justifyContent: "space-between" }}>
             <Text style={{
               fontWeight: "bold",
-            }}>Transfer Flow</Text>
-            <Row style={{ justifyContent: "space-between", alignItems: "center", flex: 1 }}>
-              <Selector
-                label="Source"
-                defaultValue={budgets[0].title}
-                options={budgets.map((budget) => budget.title)}
-                onChange={(index) => setBudgetId(budgets[index].uuid)}
-              />
-              <Selector
-                label="Destination"
-                defaultValue={budgets[0].title}
-                options={budgets.map((budget) => budget.title)}
-                onChange={(index) => setBudgetId(budgets[index].uuid)}
-              />
-            </Row>
+            }}>Source Account</Text>
+            <AccountPicker
+              currentId={sourceAccountId}
+              onSelect={(id) => setSourceAccountId(id)} />
+            {
+              sourceAccountId && (
+                <>
+                  <Text style={{
+                    fontWeight: "bold",
+                  }}>Destination Account</Text>
+                  <AccountPicker
+                    currentId={destinationAccountId}
+                    exclude={[sourceAccountId]}
+                    onSelect={(id) => setDestinationAccountId(id)} />
+                </>
+              )
+
+            }
           </View>
 
         )

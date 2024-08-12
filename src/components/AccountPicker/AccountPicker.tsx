@@ -6,11 +6,14 @@ import { Text } from '../Text';
 interface AccountPickerProps {
   currentId: string;
   onSelect: (id: string) => void;
+  exclude?: string[];
 }
 
-export default function AccountPicker({ currentId, onSelect }: AccountPickerProps) {
+export default function AccountPicker({ currentId, exclude = [], onSelect }: AccountPickerProps) {
   const { theme: { colors: { greyOutline, primary, white } } } = useTheme();
   const { items } = useAccountStore();
+
+  const data = items?.filter(i => !exclude?.includes(i?.uuid));
 
   return (
     <View style={{
@@ -24,7 +27,7 @@ export default function AccountPicker({ currentId, onSelect }: AccountPickerProp
     }}>
       <FlatList
         horizontal
-        data={items}
+        data={data}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         style={{

@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types";
-import { ExpandingView, FilterBadge, Row, TextInput, TransactionList } from "../../components"
+import { AccountPicker, BudgetPicker, CategoryPicker, ExpandingView, FilterBadge, Row, TextInput, TransactionList } from "../../components"
 import { useAccountStore, useBudgetStore, useCategoryStore, useTransactionStore } from "../../stores";
 import { useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Icon } from "@rneui/themed";
 import { Text } from "../../components";
 
@@ -25,6 +25,10 @@ export default function TransactionsScreen({ navigation, route }: TransactionsSc
   const [filterIndex, setFilterIndex] = useState(null);
   const [sorting, setSorting] = useState("Newest");
 
+  const [accountId, setAccountId] = useState("");
+  const [budgetId, setBudgetId] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+
   const filter = (filterIndex !== null) ? filters[filterIndex] : "";
 
   const filterStores = {
@@ -32,6 +36,12 @@ export default function TransactionsScreen({ navigation, route }: TransactionsSc
     "Budget": budgets,
     "Category": categories,
   };
+
+  const filterIds = {
+    "Account": accountId,
+    "Budget": budgetId,
+    "Category": categoryId,
+  }
 
   const filterRelationKeys = {
     "Account": "accountId",
@@ -44,15 +54,14 @@ export default function TransactionsScreen({ navigation, route }: TransactionsSc
     "Oldest": "ascending",
   }
 
-  const filteredItems = filter ?
-    items.filter((transaction) => {
-      const store: { uuid: string, title: string }[] = filterStores[filter];
-      const results = store.filter((storeItem) => storeItem.title.toLowerCase().includes(searchTerm.toLowerCase()));
-
-      const itemId = transaction[filterRelationKeys[filter]] ?? "";
-
-      return results.find((result) => result.uuid === itemId);
-    }) : items.filter((transaction) => transaction.title.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredItems = items
+    .filter((t) => t.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((t) => {
+      const id = filterIds[filter];
+      if (!id) return true;
+      const item = filterStores[filter].find((item: any) => item.uuid === id);
+      return t?.[filterRelationKeys[filter]] === item?.uuid;
+    });
 
   return (
     <ExpandingView style={{ paddingHorizontal: 10, paddingTop: 5 }}>
@@ -69,23 +78,41 @@ export default function TransactionsScreen({ navigation, route }: TransactionsSc
         emptyStr={`No Transactions Found`}
         order={sortingsTypes[sorting]}
       />
-      <Row style={{ gap: 5, marginBottom: 5 }}>
+      <View style={{ paddingTop: 10 }}>
+        <Row style={{ gap: 5, marginBottom: 5 }}>
+          {
+            filters.map((filter, index) => (
+              <FilterBadge
+                key={filter}
+                label={filter}
+                active={filterIndex == index}
+                onPress={() => {
+                  const alreadyActive = (filterIndex == index);
+                  setFilterIndex(alreadyActive ? null : index);
+                }
+                }
+              />
+            ))
+          }
+        </Row>
         {
-          filters.map((filter, index) => (
-            <FilterBadge
-              key={filter}
-              label={filter}
-              active={filterIndex == index}
-              onPress={() => {
-                const alreadyActive = (filterIndex == index);
-                setFilterIndex(alreadyActive ? null : index);
-              }
-              }
-            />
-          ))
+          filter === "Account" && (
+            <AccountPicker currentId={accountId} onSelect={setAccountId} />
+          )
         }
-      </Row>
-      <TextInput placeholder={`Search for Transactions by ${filter || "Title"}`} onChangeText={setSearchTerm} />
+        {
+          filter === "Budget" && (
+            <BudgetPicker currentId={budgetId} onSelect={setBudgetId} />
+          )
+        }
+        {
+          filter === "Category" && (
+            <CategoryPicker currentId={categoryId} onSelect={setCategoryId} />
+          )
+        }
+        <TextInput placeholder={`Search for Transactions...`} onChangeText={setSearchTerm} />
+
+      </View>
     </ExpandingView>
   )
 }

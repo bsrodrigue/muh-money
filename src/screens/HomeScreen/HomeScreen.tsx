@@ -73,19 +73,13 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         </View>
       </View>
 
-      <View style={{ paddingHorizontal: 20 }}>
-        <View
-          style={{
-            height: "100%"
-          }}
-        >
-          <Text weight="700" style={{ marginBottom: 10, fontSize: 12 }}>{`${mom(timeFilter).format("dddd - DD/MM/YY")}`}</Text>
-          <TransactionList
-            transactions={filtertedTransactions}
-            emptyStr={`No Transactions ${timeFilterStr}`}
-            onPress={setEditingTransaction}
-          />
-        </View>
+      <View style={{ paddingHorizontal: 20, paddingBottom: 50, flex: 1 }}>
+        <Text weight="700" style={{ fontSize: 12 }}>{`${mom(timeFilter).format("dddd - DD/MM/YY")}`}</Text>
+        <TransactionList
+          transactions={filtertedTransactions}
+          emptyStr={`No Transactions ${timeFilterStr}`}
+          onPress={setEditingTransaction}
+        />
       </View>
 
       <FAB

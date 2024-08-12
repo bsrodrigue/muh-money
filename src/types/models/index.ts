@@ -26,6 +26,8 @@ export interface Transaction {
   amount: number;
   budgetId?: string;
   accountId?: string;
+  sourceAccountId?: string;
+  destinationAccountId?: string;
   date?: string;
   time?: string;
   createdAt?: string;

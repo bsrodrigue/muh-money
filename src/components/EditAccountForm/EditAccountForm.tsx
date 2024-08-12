@@ -41,7 +41,7 @@ export default function EditAccountForm({ account, onEdit, onDelete }: EditAccou
         ))}
       </Row>
 
-      <TextInput label={`Account name`} defaultValue={account.title} onChangeText={setTitle} />
+      <TextInput label={`Account name`} defaultValue={title} onChangeText={setTitle} />
 
       {
         optionsEnabled && (

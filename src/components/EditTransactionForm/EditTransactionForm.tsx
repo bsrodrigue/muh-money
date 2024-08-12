@@ -35,6 +35,9 @@ export default function EditTransactionForm({ transaction, onEdit, onDelete }: E
   const [budgetId, setBudgetId] = useState(transaction?.budgetId);
   const [accountId, setAccountId] = useState(transaction?.accountId);
 
+  const [sourceAccountId, setSourceAccountId] = useState(transaction?.sourceAccountId);
+  const [destinationAccountId, setDestinationAccountId] = useState(transaction?.destinationAccountId);
+
   const { items: categories } = useCategoryStore();
   const { items: budgets } = useBudgetStore();
 
@@ -51,7 +54,7 @@ export default function EditTransactionForm({ transaction, onEdit, onDelete }: E
           title, amount: parseFloat(amount), categoryId,
           budgetId: budget?.uuid || "",
           accountId: budget?.linkedAccount || accountId,
-          type: transactionType,
+          type: transactionType, sourceAccountId, destinationAccountId,
           date, time,
         });
 
@@ -108,11 +111,39 @@ export default function EditTransactionForm({ transaction, onEdit, onDelete }: E
 
       <View>
         {
-          !budget?.linkedAccount && (
+          !isTransfer && !budget?.linkedAccount && (
             <AccountPicker currentId={accountId} onSelect={(id) => setAccountId(id)} />
           )
         }
       </View>
+
+      {
+        isTransfer && (
+          <View style={{ flexGrow: 1, justifyContent: "space-between" }}>
+            <Text style={{
+              fontWeight: "bold",
+            }}>Source Account</Text>
+            <AccountPicker
+              currentId={sourceAccountId}
+              onSelect={(id) => setSourceAccountId(id)} />
+            {
+              sourceAccountId && (
+                <>
+                  <Text style={{
+                    fontWeight: "bold",
+                  }}>Destination Account</Text>
+                  <AccountPicker
+                    currentId={destinationAccountId}
+                    exclude={[sourceAccountId]}
+                    onSelect={(id) => setDestinationAccountId(id)} />
+                </>
+              )
+
+            }
+          </View>
+
+        )
+      }
 
       {
         optionsIsActive && (

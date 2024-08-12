@@ -17,7 +17,9 @@ export default function FilterBadge({ label, active, activeColor, onPress }: Fil
       onPress={() => onPress?.(label)}
       style={{
         borderRadius: 25,
-        backgroundColor: (active) ? (activeColor ?? primary) : greyOutline,
+        borderColor: (active) ? (activeColor ?? primary) : greyOutline,
+        backgroundColor: (active) ? (activeColor ?? primary) : white,
+        borderWidth: 1,
         paddingHorizontal: 20,
         justifyContent: "center",
         alignItems: "center",
